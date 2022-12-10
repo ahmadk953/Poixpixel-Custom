@@ -1,0 +1,14 @@
+name: PoixpixelCustom
+version: '${project.version}'
+main: poixpixelcustom.poixpixelcustom.PoixpixelCustom
+api-version: 1.19
+authors: [ ahmadk953 ]
+description: A custom plugin made for Poixpixel
+commands:
+  enrich:
+    description: Makes you rich!
+permissions:
+  poixpixelcustom.enrich:
+    description: Gives access to use the enrich command
+    default: op
+
