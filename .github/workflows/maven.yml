@@ -27,8 +27,6 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
-    - name: Check MVN version
-      run: mvn --version
     - name: Build with Maven
       run: mvn -B package 
 
