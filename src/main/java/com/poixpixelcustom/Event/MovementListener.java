@@ -1,6 +1,6 @@
-package poixpixelcustom.poixpixelcustom.Event;
+package com.poixpixelcustom.Event;
 
-import poixpixelcustom.poixpixelcustom.PoixpixelCustom;
+import com.poixpixelcustom.PoixpixelCustom;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

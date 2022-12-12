@@ -1,6 +1,6 @@
 name: PoixpixelCustom
 version: '${project.version}'
-main: poixpixelcustom.poixpixelcustom.PoixpixelCustom
+main: com.poixpixelcustom.PoixpixelCustom
 api-version: 1.19
 authors: [ ahmadk953 ]
 description: A custom plugin made for Poixpixel

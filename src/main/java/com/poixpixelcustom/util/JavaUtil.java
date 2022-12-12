@@ -1,4 +1,4 @@
-package poixpixelcustom.poixpixelcustom.util;
+package com.poixpixelcustom.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
