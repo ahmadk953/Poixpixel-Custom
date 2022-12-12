@@ -20,9 +20,8 @@
 
     <distributionManagement>
         <repository>
-            <id>github</id>
-            <name>GitHub PoixpixelCustom Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/ahmadk953/PoixpixelCustom</url>
+            <id>respy-release</id>
+            <url>https://repsy.io/mvn/ahmadk953/poixpixelcustom</url>
         </repository>
     </distributionManagement>
 
