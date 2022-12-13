@@ -20,8 +20,9 @@
 
     <distributionManagement>
         <repository>
-            <id>respy-release</id>
-            <url>https://repsy.io/mvn/ahmadk953/poixpixelcustom</url>
+            <id>internal.repo</id>
+            <name>PoixpixelCustom</name>
+            <url>file://${project.build.directory}/mvn-repo</url>
         </repository>
     </distributionManagement>
 
