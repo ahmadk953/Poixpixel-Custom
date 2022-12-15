@@ -17,16 +17,5 @@ jobs:
                   java-version: '17'
                   java-package: jdk
                   settings-path: ${{ github.workspace }} # location for the settings.xml file
-            - uses: jfrog/setup-jfrog-cli@v3
-              env:
-                # JFrog platform url (for example: https://acme.jfrog.io)
-                JF_URL: ${{ secrets.JF_URL }}
-
-                # Basic authentication credentials
-                JF_USER: ${{ secrets.JF_USER }}
-                JF_PASSWORD: ${{ secrets.JF_PASSWORD }}
-                #or
-                # JFrog Platform access token
-                #JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
-            - run: |
-                jf rt ping
+            - name: Deploy
+              run: mvn -B clean deploy
