@@ -49,8 +49,6 @@ import com.poixpixelcustom.db.*;
 
 public final class PoixpixelCustom extends JavaPlugin {
 
-    private final MovementListener movementListener = new MovementListener(this);
-
     private static final Version OLDEST_MC_VER_SUPPORTED = Version.fromString("1.19");
     private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
     private static PoixpixelCustom plugin;
@@ -161,6 +159,8 @@ public final class PoixpixelCustom extends JavaPlugin {
     }
 
     public void loadFoundation(boolean reload) {
+
+        loadDatabaseConfig(reload);
 
         loadConfig(reload);
     }
