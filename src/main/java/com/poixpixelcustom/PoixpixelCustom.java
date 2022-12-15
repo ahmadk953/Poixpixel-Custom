@@ -45,8 +45,11 @@ import com.poixpixelcustom.Event.*;
 import com.poixpixelcustom.Exceptions.*;
 import com.poixpixelcustom.Object.*;
 import com.poixpixelcustom.PoixpixelCustomMessaging;
+import com.poixpixelcustom.db.*;
 
 public final class PoixpixelCustom extends JavaPlugin {
+
+    private final MovementListener movementListener = new MovementListener(this);
 
     private static final Version OLDEST_MC_VER_SUPPORTED = Version.fromString("1.19");
     private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
@@ -54,7 +57,7 @@ public final class PoixpixelCustom extends JavaPlugin {
     private static BukkitAudiences adventure;
     private final String version = this.getDescription().getVersion();
     private final List<PoixpixelCustomInitException.PoixpixelCustomError> errors = new ArrayList<>();
-    private final Essentials essentials = null;
+    private Essentials essentials = null;
     private boolean citizens2 = false;
     private int pluginsFound = 0;
 
@@ -103,6 +106,11 @@ public final class PoixpixelCustom extends JavaPlugin {
 
     @Override
     public void onDisable() {
+
+        if (adventure != null) {
+            adventure.close();
+            adventure = null;
+        }
 
         if (!isError()){
             getLogger().info("Plugin was disabled successfully!");
@@ -157,6 +165,16 @@ public final class PoixpixelCustom extends JavaPlugin {
         loadConfig(reload);
     }
 
+    private void loadDatabaseConfig(boolean reload) {
+        DatabaseConfig.loadDatabaseConfig(getDataFolder().toPath().resolve("settings").resolve("database.yml"));
+        if (reload) {
+            // If Towny is in Safe Mode (because of localization) turn off Safe Mode.
+            if (isError(PoixpixelCustomInitException.PoixpixelCustomError.DATABASE_CONFIG)) {
+                removeError(PoixpixelCustomInitException.PoixpixelCustomError.DATABASE_CONFIG);
+            }
+        }
+    }
+
 
     private void checkPlugins() {
 
@@ -176,7 +194,10 @@ public final class PoixpixelCustom extends JavaPlugin {
         }
 
         test = getServer().getPluginManager().getPlugin("Essentials");
-        if (test != null) {
+        if (test == null) {
+            PoixpixelCustomSettings.setUsingEssentials(false);
+        } else if (PoixpixelCustomSettings.isUsingEssentials()) {
+            this.essentials = (Essentials) test;
             addons.add(String.format("%s v%s", "Essentials", test.getDescription().getVersion()));
             pluginsFound = pluginsFound + 1;
         }

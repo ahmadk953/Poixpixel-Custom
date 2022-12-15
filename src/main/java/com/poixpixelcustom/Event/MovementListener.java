@@ -27,13 +27,13 @@ public class MovementListener implements Listener {
         Material material = b.getType();
         switch (material) {
             case WATER:
-                b.setType(Material.ICE);
+                b.setType(Material.WATER);
                 break;
             case GRASS:
-                b.setType(Material.ACACIA_PLANKS);
+                b.setType(Material.GRASS);
                 break;
             case SAND:
-                b.setType(Material.GLASS);
+                b.setType(Material.SAND);
                 break;
         }
     }

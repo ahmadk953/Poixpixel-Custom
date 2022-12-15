@@ -24,6 +24,12 @@ public enum ConfigNodes {
             "",
             "# Command used to cancel some actions/tasks"),
 
+    PLUGIN_DEBUG_MODE(
+            "plugin.debug_mode",
+            "false",
+            "",
+            "# Lots of messages to tell you what's going on in the server with time taken for events."),
+
     PLUGIN_USING_ESSENTIALS(
             "plugin.interfacing.using_essentials",
             "false",
@@ -34,7 +40,11 @@ public enum ConfigNodes {
             "invite_system.confirm_command",
             "confirm",
             "",
-            "# Command used to confirm some PoixpixelCustom actions/tasks)");
+            "# Command used to confirm some PoixpixelCustom actions/tasks)"),
+
+    PLUGIN_DEV_MODE_ENABLE("plugin.dev_mode.enable", "false"),
+
+    PLUGIN_DEV_MODE_DEV_NAME("plugin.dev_mode.dev_name", "ahmadk953");
 
 
     private final String Root;

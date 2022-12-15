@@ -1,6 +1,7 @@
 package com.poixpixelcustom;
 
 import com.github.bsideup.jabel.Desugar;
+import com.poixpixelcustom.db.DatabaseConfig;
 import com.poixpixelcustom.Config.ConfigNodes;
 import com.poixpixelcustom.Config.CommentedConfiguration;
 import com.poixpixelcustom.Exceptions.Initialization.PoixpixelCustomInitException;
@@ -106,4 +107,66 @@ public class PoixpixelCustomSettings {
         config = newConfig;
         newConfig = null;
     }
+
+    // SQL
+    public static String getSQLHostName() {
+
+        return DatabaseConfig.getString(DatabaseConfig.DATABASE_HOSTNAME);
+    }
+
+    public static String getSQLPort() {
+
+        return DatabaseConfig.getString(DatabaseConfig.DATABASE_PORT);
+    }
+
+    public static String getSQLDBName() {
+
+        return DatabaseConfig.getString(DatabaseConfig.DATABASE_DBNAME);
+    }
+
+    public static String getSQLTablePrefix() {
+
+        return DatabaseConfig.getString(DatabaseConfig.DATABASE_TABLEPREFIX);
+    }
+
+    public static String getSQLUsername() {
+
+        return DatabaseConfig.getString(DatabaseConfig.DATABASE_USERNAME);
+    }
+
+    public static String getSQLPassword() {
+
+        return DatabaseConfig.getString(DatabaseConfig.DATABASE_PASSWORD);
+    }
+
+    public static String getSQLFlags() {
+
+        return DatabaseConfig.getString(DatabaseConfig.DATABASE_FLAGS);
+    }
+
+    public static boolean getDebug() {
+
+        return getBoolean(ConfigNodes.PLUGIN_DEBUG_MODE);
+    }
+
+    public static boolean isDevMode() {
+
+        return getBoolean(ConfigNodes.PLUGIN_DEV_MODE_ENABLE);
+    }
+
+    public static String getDevName() {
+
+        return getString(ConfigNodes.PLUGIN_DEV_MODE_DEV_NAME);
+    }
+
+    public static void setUsingEssentials(boolean newSetting) {
+
+        setProperty(ConfigNodes.PLUGIN_USING_ESSENTIALS.getRoot(), newSetting);
+    }
+
+    public static void setProperty(String root, Object value) {
+
+        config.set(root.toLowerCase(Locale.ROOT), value.toString());
+    }
+
 }
