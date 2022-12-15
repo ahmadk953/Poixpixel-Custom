@@ -9,6 +9,14 @@
     <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <licenses>
+        <license>
+            <name>APACHE LICENSE, VERSION 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <name>PoixpixelCustom</name>
 
     <description>A custom plugin made for Poixpixel</description>
@@ -20,10 +28,15 @@
 
     <distributionManagement>
         <repository>
-            <id>internal.repo</id>
-            <name>PoixpixelCustom</name>
-            <url>file://${project.build.directory}/mvn-repo</url>
+            <id>central</id>
+            <name>a0bp5iyvlonml-artifactory-primary-0-releases</name>
+            <url>https://ahmadk953.jfrog.io/artifactory/com.poixpixelcustom</url>
         </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>a0bp5iyvlonml-artifactory-primary-0-snapshots</name>
+            <url>https://ahmadk953.jfrog.io/artifactory/com.poixpixelcustom/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <build>
@@ -60,7 +73,8 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.4.1</version>
                 <configuration>
-                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
+                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml
+                    </dependencyReducedPomLocation>
                     <artifactSet>
                         <includes>
                             <include>net.kyori:adventure-platform-bukkit</include>

@@ -1,0 +1,10 @@
+version: 1
+type: maven
+resolver:
+  serverId: ahmadk953
+  snapshotRepo: com.poixpixelcustom
+  releaseRepo: com.poixpixelcustom
+deployer:
+  serverId: ahmadk953
+  snapshotRepo: com.poixpixelcustom
+  releaseRepo: com.poixpixelcustom
