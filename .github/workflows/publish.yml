@@ -17,5 +17,16 @@ jobs:
                   java-version: '17'
                   java-package: jdk
                   settings-path: ${{ github.workspace }} # location for the settings.xml file
-            - name: Deploy
-              run: mvn -B clean deploy
+
+            - name: Setup JFrog CLI
+              uses: jfrog/setup-jfrog-cli@v2
+              env:
+                JF_ENV_1: ${{ secrets.JF_SECRET_ENV_1 }}
+            - name: Run JFrog CLI
+              run: |
+                # Collect environment variables for the build
+                jf rt bce
+                # Collect VCS details from git and add them to the build
+                jf rt bag
+                # Publish build info
+                jf rt bp

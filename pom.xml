@@ -30,12 +30,12 @@
         <repository>
             <id>central</id>
             <name>a0bp5iyvlonml-artifactory-primary-0-releases</name>
-            <url>https://ahmadk953.jfrog.io/artifactory/com.poixpixelcustom</url>
+            <url>https://ahmadk953.jfrog.io/artifactory/poixpixelcustom/releases/</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>a0bp5iyvlonml-artifactory-primary-0-snapshots</name>
-            <url>https://ahmadk953.jfrog.io/artifactory/com.poixpixelcustom/snapshots</url>
+            <url>https://ahmadk953.jfrog.io/artifactory/poixpixelcustom//snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
