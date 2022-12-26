@@ -4,6 +4,8 @@ import com.earth2me.essentials.Essentials;
 import com.poixpixelcustom.Exceptions.Initialization.PoixpixelCustomInitException;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bstats.bukkit.Metrics;
@@ -11,6 +13,8 @@ import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.TabCompleter;
@@ -35,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.poixpixelcustom.Commands.*;
 import com.poixpixelcustom.util.*;
@@ -49,6 +54,7 @@ import com.poixpixelcustom.db.*;
 
 public final class PoixpixelCustom extends JavaPlugin {
 
+    private static final Logger log = Logger.getLogger("Minecraft");
     private static final Version OLDEST_MC_VER_SUPPORTED = Version.fromString("1.19");
     private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
     private static PoixpixelCustom plugin;
@@ -56,6 +62,9 @@ public final class PoixpixelCustom extends JavaPlugin {
     private final String version = this.getDescription().getVersion();
     private final List<PoixpixelCustomInitException.PoixpixelCustomError> errors = new ArrayList<>();
     private Essentials essentials = null;
+    private static Economy econ = null;
+    private static Permission perms = null;
+    private static Chat chat = null;
     private boolean citizens2 = false;
     private int pluginsFound = 0;
 
@@ -80,7 +89,7 @@ public final class PoixpixelCustom extends JavaPlugin {
         BukkitTools.initialize(this);
 
         try {
-            // Load the foundation of PoixpixelCustom, containing config, locales, database.
+            // Load the foundation of PoixpixelCustom, containing config, locales, database, and economy.
             loadFoundation(false);
 
             // Setup bukkit command interfaces
@@ -111,9 +120,9 @@ public final class PoixpixelCustom extends JavaPlugin {
         }
 
         if (!isError()){
-            getLogger().info("Plugin was disabled successfully!");
+            log.info(String.format("[%s] Disabled Version %s", getDescription().getName(), getDescription().getVersion()));
         } else {
-            getLogger().warning("Plugin was disabled with 1 or more errors." + getErrors());
+            log.warning(String.format("[%s] Disabled Version %s with 1 or more errors", getDescription().getName(), getDescription().getVersion()));
         }
 
     }
@@ -135,8 +144,12 @@ public final class PoixpixelCustom extends JavaPlugin {
     private void registerCommands() {
         this.getCommand("enrich").setExecutor(new EnrichCommand());
         getLogger().info("Added the Enrich command.");
-
+        this.getCommand("test-economy").setExecutor(new TestEconomyCommand());
+        getLogger().info("Added the Test-Economy command.");
+        this.getCommand("test-permission").setExecutor(new TestPermissionCommand());
+        getLogger().info("Added the Test-Permission command.");
     }
+
 
     private void addMetricsCharts() {
         /*
@@ -159,10 +172,50 @@ public final class PoixpixelCustom extends JavaPlugin {
     }
 
     public void loadFoundation(boolean reload) {
-
+        if (!setupEconomy() ) {
+            log.warning(String.format("[%s] - No Vault dependency found! Plugin might run with limited functionality.", getDescription().getName()));
+            return;
+        }
+        setupPermissions();
+        setupChat();
         loadDatabaseConfig(reload);
-
         loadConfig(reload);
+    }
+
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
+
+    private boolean setupChat() {
+        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+        chat = rsp.getProvider();
+        return chat != null;
+    }
+
+    private boolean setupPermissions() {
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        perms = rsp.getProvider();
+        return perms != null;
+    }
+
+    public static Economy getEconomy() {
+        return econ;
+    }
+
+    public static Permission getPermissions() {
+        return perms;
+    }
+
+    public static Chat getChat() {
+        return chat;
     }
 
     private void loadDatabaseConfig(boolean reload) {

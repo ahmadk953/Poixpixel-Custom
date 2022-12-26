@@ -270,12 +270,7 @@ public class BukkitTools {
     @SuppressWarnings("deprecation")
     public static Objective objective(Scoreboard board, @NotNull String name, @NotNull String displayName) {
         Objective objective;
-        try {
-            objective = board.registerNewObjective(name, Criteria.DUMMY, displayName);
-        } catch (NoClassDefFoundError e) {
-            // TODO: Remove when 1.19.2 is the lowest supported version.
-            objective = board.registerNewObjective(name, "dummy", displayName);
-        }
+        objective = board.registerNewObjective(name, Criteria.DUMMY, displayName);
         return objective;
     }
 
