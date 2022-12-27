@@ -1,4 +1,4 @@
-package com.poixpixelcustom.Object
+package com.poixpixelcustom.`object`
 
 interface Nameable {
     /**

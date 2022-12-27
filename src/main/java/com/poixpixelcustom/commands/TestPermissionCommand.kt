@@ -1,4 +1,4 @@
-package com.poixpixelcustom.Commands
+package com.poixpixelcustom.commands
 
 import net.milkbowl.vault.permission.Permission
 import org.bukkit.command.Command

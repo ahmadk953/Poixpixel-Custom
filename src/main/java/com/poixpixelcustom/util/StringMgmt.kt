@@ -26,6 +26,7 @@ object StringMgmt {
     @Deprecated("")
     val bracketPattern = Pattern.compile("(?<!\\\\)\\{(#[a-fA-F0-9]{6})}")
     private val legacyHexFunction = Function { hex: String -> ChatColor.of("#$hex").toString() }
+
     @ApiStatus.Internal
     fun translateHexColors(string: String): String {
         var string = string

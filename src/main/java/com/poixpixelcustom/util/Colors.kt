@@ -48,20 +48,22 @@ object Colors {
     const val GRAY = "<gray>"
     const val DARK_GRAY = "<dark_gray>"
     const val BLACK = "<black>"
-    fun strip(line: String?): String? {
+    fun strip(line: String?): String {
         return PoixpixelCustomComponents.stripTags(ChatColor.stripColor(line)!!)
     }
 
-    fun translateColorCodes(str: String?): String? {
+    fun translateColorCodes(str: String?): String {
         return StringMgmt.translateHexColors(ChatColor.translateAlternateColorCodes('&', str!!))
     }
 
     fun translateLegacyCharacters(input: String?): String? {
         var input = input
-        val matcher = legacyPattern.matcher(input)
-        while (matcher.find()) {
-            val legacy = matcher.group()
-            input = input!!.replace(legacy, legacyLookupMap.getOrDefault(legacy.substring(1), legacy))
+        val matcher = input?.let { legacyPattern.matcher(it) }
+        if (matcher != null) {
+            while (matcher.find()) {
+                val legacy = matcher.group()
+                input = input!!.replace(legacy, legacyLookupMap.getOrDefault(legacy.substring(1), legacy))
+            }
         }
         return input
     }
@@ -73,7 +75,7 @@ object Colors {
      * @param input The input that may or may not contain hex.
      * @return The input, with the minimessage hex format.
      */
-    fun translateLegacyHex(input: String): String? {
+    fun translateLegacyHex(input: String): String {
         return StringMgmt.translateHexColors(input)
     }
 

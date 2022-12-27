@@ -1,9 +1,7 @@
 package com.poixpixelcustom
 
-import com.earth2me.essentials.Essentials
-import com.poixpixelcustom.Commands.EnrichCommand
+import com.poixpixelcustom.commands.EnrichCommand
 import com.poixpixelcustom.util.BukkitTools
-import com.poixpixelcustom.util.Version
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import net.milkbowl.vault.chat.Chat
 import net.milkbowl.vault.economy.Economy
@@ -30,7 +28,7 @@ class PoixpixelCustom : JavaPlugin() {
     override fun onEnable() {
         BukkitTools.initialize(this)
         // Load the foundation of PoixpixelCustom, containing config, locales, database, and economy.
-        loadFoundation(false)
+        loadFoundation()
 
         // Setup bukkit command interfaces
         registerSpecialCommands()
@@ -81,7 +79,7 @@ class PoixpixelCustom : JavaPlugin() {
         }))
     }
 
-    fun loadFoundation(reload: Boolean) {
+    private fun loadFoundation() {
         if (!setupEconomy()) {
             log.warning(String.format("[%s] - No Vault dependency found! Plugin might run with limited functionality.", description.name))
             return
@@ -114,21 +112,20 @@ class PoixpixelCustom : JavaPlugin() {
 
     private fun checkPlugins() {
         plugin.logger.info("Searching for third-party plugins...")
-        val ecowarn = ""
         val addons: MutableList<String> = ArrayList()
-        var test: Plugin?
 
         /*
          * Check add-ons and third-party plugins we use.
-         */test = server.pluginManager.getPlugin("Vault")
+         */
+        var test: Plugin? = server.pluginManager.getPlugin("Vault")
         if (test != null) {
             addons.add(String.format("%s v%s", "Vault", test.description.version))
-            pluginsFound = pluginsFound + 1
+            pluginsFound += 1
         }
         test = server.pluginManager.getPlugin("Essentials")
         if (test == null) {
             //PoixpixelCustomSettings.setUsingEssentials(false);
-            pluginsFound = pluginsFound - 0
+            pluginsFound -= 0
         }
         if (pluginsFound > 0) {
             logger.info("Add-on plugins found!")
@@ -139,14 +136,12 @@ class PoixpixelCustom : JavaPlugin() {
         }
     }
 
-    fun setCitizens2(b: Boolean): PoixpixelCustom {
+    fun setCitizens2(): PoixpixelCustom {
         return this
     }
 
     companion object {
         private val log = Logger.getLogger("Minecraft")
-        private val OLDEST_MC_VER_SUPPORTED: Version = Version.Companion.fromString("1.19")
-        private val CUR_BUKKIT_VER: Version = Version.Companion.fromString(Bukkit.getBukkitVersion())
         private lateinit var plugin: PoixpixelCustom
         private var adventure: BukkitAudiences? = null
         var economy: Economy? = null
@@ -160,12 +155,11 @@ class PoixpixelCustom : JavaPlugin() {
          * @return the PoixpixelCustom instance
          */
         fun getPlugin(): PoixpixelCustom {
-            checkNotNull(plugin) { "Attempted to use getPlugin() while the plugin is null, are you shading PoixpixelCustom?" }
             return plugin
         }
 
         private val isSpigotOrDerivative: Boolean
-            private get() = try {
+            get() = try {
                 Class.forName("org.bukkit.entity.Player\$Spigot")
                 true
             } catch (tr: ClassNotFoundException) {

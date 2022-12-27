@@ -3,7 +3,6 @@ package com.poixpixelcustom.util
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
-import net.kyori.adventure.text.minimessage.tag.standard.StandardTags
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.jetbrains.annotations.ApiStatus
@@ -29,7 +28,7 @@ object PoixpixelCustomComponents {
      * @return The component equivalent
      */
     fun legacy(string: String): Component {
-        return LegacyComponentSerializer.legacySection().deserialize(Colors.translateColorCodes(string)!!)
+        return LegacyComponentSerializer.legacySection().deserialize(Colors.translateColorCodes(string))
     }
 
     /**

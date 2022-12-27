@@ -1,4 +1,4 @@
-package com.poixpixelcustom.Commands
+package com.poixpixelcustom.commands
 
 import net.milkbowl.vault.economy.Economy
 import net.milkbowl.vault.economy.EconomyResponse
