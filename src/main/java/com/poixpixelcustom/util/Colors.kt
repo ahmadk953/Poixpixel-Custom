@@ -1,143 +1,130 @@
-package com.poixpixelcustom.util;
+package com.poixpixelcustom.util
 
-import org.bukkit.ChatColor;
-import org.jetbrains.annotations.Nullable;
+import net.kyori.adventure.text.format.NamedTextColor
+import org.bukkit.ChatColor
+import java.util.function.Function
+import java.util.regex.Pattern
 
-import net.kyori.adventure.text.format.NamedTextColor;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-public class Colors {
-
-    private static final Map<String, String> legacyLookupMap = new HashMap<>();
-    private static final Pattern legacyPattern = Pattern.compile("[§&][0-9a-fk-or]");
+object Colors {
+    private val legacyLookupMap: MutableMap<String, String> = HashMap()
+    private val legacyPattern = Pattern.compile("[§&][0-9a-fk-or]")
 
     /*
      * Legacy colors
      */
-
-    public static final String Black = "\u00A70";
-    public static final String Navy = "\u00A71";
-    public static final String Green = "\u00A72";
-    public static final String Blue = "\u00A73";
-    public static final String Red = "\u00A74";
-    public static final String Purple = "\u00A75";
-    public static final String Gold = "\u00A76";
-    public static final String LightGray = "\u00A77";
-    public static final String Gray = "\u00A78";
-    public static final String DarkPurple = "\u00A79";
-    public static final String LightGreen = "\u00A7a";
-    public static final String LightBlue = "\u00A7b";
-    public static final String Rose = "\u00A7c";
-    public static final String LightPurple = "\u00A7d";
-    public static final String Yellow = "\u00A7e";
-    public static final String White = "\u00A7f";
+    const val Black = "\u00A70"
+    const val Navy = "\u00A71"
+    const val Green = "\u00A72"
+    const val Blue = "\u00A73"
+    const val Red = "\u00A74"
+    const val Purple = "\u00A75"
+    const val Gold = "\u00A76"
+    const val LightGray = "\u00A77"
+    const val Gray = "\u00A78"
+    const val DarkPurple = "\u00A79"
+    const val LightGreen = "\u00A7a"
+    const val LightBlue = "\u00A7b"
+    const val Rose = "\u00A7c"
+    const val LightPurple = "\u00A7d"
+    const val Yellow = "\u00A7e"
+    const val White = "\u00A7f"
 
     /*
      * Minimessage colors
      */
-
-    public static final String DARK_RED = "<dark_red>";
-    public static final String RED = "<red>";
-    public static final String GOLD = "<gold>";
-    public static final String YELLOW = "<yellow>";
-    public static final String DARK_GREEN = "<dark_green>";
-    public static final String GREEN = "<green>";
-    public static final String DARK_AQUA = "<dark_aqua>";
-    public static final String AQUA = "<aqua>";
-    public static final String DARK_BLUE = "<dark_blue>";
-    public static final String BLUE = "<blue>";
-    public static final String LIGHT_PURPLE = "<light_purple>";
-    public static final String DARK_PURPLE = "<dark_purple>";
-    public static final String WHITE = "<white>";
-    public static final String GRAY = "<gray>";
-    public static final String DARK_GRAY = "<dark_gray>";
-    public static final String BLACK = "<black>";
-
-    public static String strip(String line) {
-        return PoixpixelCustomComponents.stripTags(ChatColor.stripColor(line));
+    const val DARK_RED = "<dark_red>"
+    const val RED = "<red>"
+    const val GOLD = "<gold>"
+    const val YELLOW = "<yellow>"
+    const val DARK_GREEN = "<dark_green>"
+    const val GREEN = "<green>"
+    const val DARK_AQUA = "<dark_aqua>"
+    const val AQUA = "<aqua>"
+    const val DARK_BLUE = "<dark_blue>"
+    const val BLUE = "<blue>"
+    const val LIGHT_PURPLE = "<light_purple>"
+    const val DARK_PURPLE = "<dark_purple>"
+    const val WHITE = "<white>"
+    const val GRAY = "<gray>"
+    const val DARK_GRAY = "<dark_gray>"
+    const val BLACK = "<black>"
+    fun strip(line: String?): String? {
+        return PoixpixelCustomComponents.stripTags(ChatColor.stripColor(line)!!)
     }
 
-    public static String translateColorCodes(String str) {
-        return StringMgmt.translateHexColors(ChatColor.translateAlternateColorCodes('&', str));
+    fun translateColorCodes(str: String?): String? {
+        return StringMgmt.translateHexColors(ChatColor.translateAlternateColorCodes('&', str!!))
     }
 
-    public static String translateLegacyCharacters(String input) {
-        final Matcher matcher = legacyPattern.matcher(input);
-
+    fun translateLegacyCharacters(input: String?): String? {
+        var input = input
+        val matcher = legacyPattern.matcher(input)
         while (matcher.find()) {
-            String legacy = matcher.group();
-            input = input.replace(legacy, legacyLookupMap.getOrDefault(legacy.substring(1), legacy));
+            val legacy = matcher.group()
+            input = input!!.replace(legacy, legacyLookupMap.getOrDefault(legacy.substring(1), legacy))
         }
-
-        return input;
+        return input
     }
 
-    private static final Function<String, String> modernHexFunction = (hex) -> "<#" + hex + ">";
+    private val modernHexFunction = Function { hex: String -> "<#$hex>" }
 
     /**
      * Converts non-minimessage hex formats to minimessage.
      * @param input The input that may or may not contain hex.
      * @return The input, with the minimessage hex format.
      */
-    public static String translateLegacyHex(String input) {
-        return StringMgmt.translateHexColors(input);
+    fun translateLegacyHex(input: String): String? {
+        return StringMgmt.translateHexColors(input)
     }
 
     /**
      * @param colorCode A legacy or MiniMessage color code.
-     * @return the {@link NamedTextColor} for the entered color string, or null if it is invalid.
+     * @return the [NamedTextColor] for the entered color string, or null if it is invalid.
      */
-    @Nullable
-    public static NamedTextColor toNamedTextColor(String colorCode) {
-        return switch (colorCode) {
-            case "\u00A70", BLACK -> NamedTextColor.BLACK;
-            case "\u00A71", DARK_BLUE -> NamedTextColor.DARK_BLUE;
-            case "\u00A72", DARK_GREEN -> NamedTextColor.DARK_GREEN;
-            case "\u00A73", DARK_AQUA -> NamedTextColor.DARK_AQUA;
-            case "\u00A74", DARK_RED -> NamedTextColor.DARK_RED;
-            case "\u00A75", DARK_PURPLE -> NamedTextColor.DARK_PURPLE;
-            case "\u00A76", GOLD -> NamedTextColor.GOLD;
-            case "\u00A77", GRAY -> NamedTextColor.GRAY;
-            case "\u00A78", DARK_GRAY -> NamedTextColor.DARK_GRAY;
-            case "\u00A79", BLUE -> NamedTextColor.BLUE;
-            case "\u00A7a", GREEN -> NamedTextColor.GREEN;
-            case "\u00A7b", AQUA -> NamedTextColor.AQUA;
-            case "\u00A7c", RED -> NamedTextColor.RED;
-            case "\u00A7d", LIGHT_PURPLE -> NamedTextColor.LIGHT_PURPLE;
-            case "\u00A7e", YELLOW -> NamedTextColor.YELLOW;
-            case "\u00A7f", WHITE -> NamedTextColor.WHITE;
-            default -> null;
-        };
+    fun toNamedTextColor(colorCode: String?): NamedTextColor? {
+        return when (colorCode) {
+            "\u00A70", BLACK -> NamedTextColor.BLACK
+            "\u00A71", DARK_BLUE -> NamedTextColor.DARK_BLUE
+            "\u00A72", DARK_GREEN -> NamedTextColor.DARK_GREEN
+            "\u00A73", DARK_AQUA -> NamedTextColor.DARK_AQUA
+            "\u00A74", DARK_RED -> NamedTextColor.DARK_RED
+            "\u00A75", DARK_PURPLE -> NamedTextColor.DARK_PURPLE
+            "\u00A76", GOLD -> NamedTextColor.GOLD
+            "\u00A77", GRAY -> NamedTextColor.GRAY
+            "\u00A78", DARK_GRAY -> NamedTextColor.DARK_GRAY
+            "\u00A79", BLUE -> NamedTextColor.BLUE
+            "\u00A7a", GREEN -> NamedTextColor.GREEN
+            "\u00A7b", AQUA -> NamedTextColor.AQUA
+            "\u00A7c", RED -> NamedTextColor.RED
+            "\u00A7d", LIGHT_PURPLE -> NamedTextColor.LIGHT_PURPLE
+            "\u00A7e", YELLOW -> NamedTextColor.YELLOW
+            "\u00A7f", WHITE -> NamedTextColor.WHITE
+            else -> null
+        }
     }
 
-    static {
-        legacyLookupMap.put("4", DARK_RED);
-        legacyLookupMap.put("c", RED);
-        legacyLookupMap.put("6", GOLD);
-        legacyLookupMap.put("e", YELLOW);
-        legacyLookupMap.put("2", DARK_GREEN);
-        legacyLookupMap.put("a", GREEN);
-        legacyLookupMap.put("3", DARK_AQUA);
-        legacyLookupMap.put("b", AQUA);
-        legacyLookupMap.put("1", DARK_BLUE);
-        legacyLookupMap.put("9", BLUE);
-        legacyLookupMap.put("d", LIGHT_PURPLE);
-        legacyLookupMap.put("5", DARK_PURPLE);
-        legacyLookupMap.put("f", WHITE);
-        legacyLookupMap.put("7", GRAY);
-        legacyLookupMap.put("8", DARK_GRAY);
-        legacyLookupMap.put("0", BLACK);
-
-        legacyLookupMap.put("k", "<obfuscated>");
-        legacyLookupMap.put("l", "<bold>");
-        legacyLookupMap.put("m", "<strikethrough>");
-        legacyLookupMap.put("n", "<underline>");
-        legacyLookupMap.put("o", "<italic>");
-        legacyLookupMap.put("r", "<reset>");
+    init {
+        legacyLookupMap["4"] = DARK_RED
+        legacyLookupMap["c"] = RED
+        legacyLookupMap["6"] = GOLD
+        legacyLookupMap["e"] = YELLOW
+        legacyLookupMap["2"] = DARK_GREEN
+        legacyLookupMap["a"] = GREEN
+        legacyLookupMap["3"] = DARK_AQUA
+        legacyLookupMap["b"] = AQUA
+        legacyLookupMap["1"] = DARK_BLUE
+        legacyLookupMap["9"] = BLUE
+        legacyLookupMap["d"] = LIGHT_PURPLE
+        legacyLookupMap["5"] = DARK_PURPLE
+        legacyLookupMap["f"] = WHITE
+        legacyLookupMap["7"] = GRAY
+        legacyLookupMap["8"] = DARK_GRAY
+        legacyLookupMap["0"] = BLACK
+        legacyLookupMap["k"] = "<obfuscated>"
+        legacyLookupMap["l"] = "<bold>"
+        legacyLookupMap["m"] = "<strikethrough>"
+        legacyLookupMap["n"] = "<underline>"
+        legacyLookupMap["o"] = "<italic>"
+        legacyLookupMap["r"] = "<reset>"
     }
 }

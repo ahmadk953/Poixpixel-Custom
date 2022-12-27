@@ -1,53 +1,50 @@
-package com.poixpixelcustom.util;
+package com.poixpixelcustom.util
 
-import org.bukkit.map.MinecraftFont;
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.Style
+import net.kyori.adventure.text.format.TextDecoration
+import org.bukkit.map.MinecraftFont
+import org.jetbrains.annotations.ApiStatus
+import solar.squares.pixelwidth.DefaultCharacterWidthFunction
+import solar.squares.pixelwidth.PixelWidthSource
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
-import org.jetbrains.annotations.ApiStatus;
-import solar.squares.pixelwidth.DefaultCharacterWidthFunction;
-import solar.squares.pixelwidth.PixelWidthSource;
-
-public class FontUtil {
+object FontUtil {
     @ApiStatus.Internal
-    public static final MinecraftFont font = new MinecraftFont();
-
-    private static final PixelWidthSource widthSource = PixelWidthSource
-            .pixelWidth(new DefaultCharacterWidthFunction() {
-                @Override
-                public float handleMissing(int codepoint, Style style) {
+    val font = MinecraftFont()
+    private val widthSource = PixelWidthSource
+            .pixelWidth(object : DefaultCharacterWidthFunction() {
+                override fun handleMissing(codepoint: Int, style: Style): Float {
                     // Use MinecraftFont as a backup
-                    try {
-                        return font.getWidth(
-                                String.valueOf((char) codepoint) + (style.hasDecoration(TextDecoration.BOLD) ? 1 : 0));
-                    } catch (IllegalArgumentException e) {
-                        return 6.0f;
+                    return try {
+                        font.getWidth(
+                                codepoint.toChar().toString() + if (style.hasDecoration(TextDecoration.BOLD)) 1 else 0).toFloat()
+                    } catch (e: IllegalArgumentException) {
+                        6.0f
                     }
                 }
-            });
+            })
 
-    public static float measureWidth(Component source) {
-        return widthSource.width(source);
+    fun measureWidth(source: Component?): Float {
+        return widthSource.width(source!!)
     }
 
-    public static float measureWidth(String source) {
-        return widthSource.width(source, Style.empty());
+    fun measureWidth(source: String?): Float {
+        return widthSource.width(source!!, Style.empty())
     }
 
-    public static float measureWidth(String source, Style style) {
-        return widthSource.width(source, style);
+    fun measureWidth(source: String?, style: Style?): Float {
+        return widthSource.width(source!!, style!!)
     }
 
-    public static float measureWidth(char source) {
-        return widthSource.width(source, Style.empty());
+    fun measureWidth(source: Char): Float {
+        return widthSource.width(source, Style.empty())
     }
 
-    public static float measureWidth(char source, Style style) {
-        return widthSource.width(source, style);
+    fun measureWidth(source: Char, style: Style?): Float {
+        return widthSource.width(source, style!!)
     }
 
-    public static boolean isValidMinecraftFont(String text) {
-        return font.isValid(text);
+    fun isValidMinecraftFont(text: String?): Boolean {
+        return font.isValid(text!!)
     }
 }

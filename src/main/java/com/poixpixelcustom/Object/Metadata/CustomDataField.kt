@@ -1,38 +1,20 @@
-package com.poixpixelcustom.Object.Metadata;
+package com.poixpixelcustom.Object.Metadata
 
-import com.poixpixelcustom.Exceptions.InvalidMetadataTypeException;
-import com.poixpixelcustom.util.PoixpixelCustomComponents;
-import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.poixpixelcustom.util.PoixpixelCustomComponents
+import net.kyori.adventure.text.Component
 
-public abstract class CustomDataField<T> implements Cloneable {
-    private T value;
-    private final String key;
+abstract class CustomDataField<T> @JvmOverloads constructor(key: String, value: T? = null, label: String? = null) : Cloneable {
+    var value: T? = null
+    val key: String
+    protected var label: String
 
-    protected String label;
-
-    public CustomDataField(String key, T value, String label)
-    {
-        this.setValue(value);
-        this.key = key;
-        this.label = label;
+    init {
+        this.value = value
+        this.key = key
+        this.label = label!!
     }
 
-    public CustomDataField(String key, T value)
-    {
-        this(key, value, null);
-    }
-
-    public CustomDataField(String key, String label)
-    {
-        this(key, null, label);
-    }
-
-    public CustomDataField(String key)
-    {
-        this(key, null, null);
-    }
+    constructor(key: String, label: String?) : this(key, null, label)
 
     /**
      * Gets the type id for the given CustomDataField class.
@@ -41,17 +23,7 @@ public abstract class CustomDataField<T> implements Cloneable {
      *
      * @return type id of the given CustomDataField class.
      */
-    @NotNull
-    public abstract String getTypeID();
-
-    public T getValue() {
-
-        return value;
-    }
-
-    public void setValue(T value) {
-        this.value = value;
-    }
+    abstract val typeID: String
 
     /**
      * Sets the value based on the given input.
@@ -59,7 +31,7 @@ public abstract class CustomDataField<T> implements Cloneable {
      *
      * @param strValue input.
      */
-    public abstract void setValueFromString(String strValue);
+    abstract fun setValueFromString(strValue: String?)
 
     /**
      * Serializes the current value to a string.
@@ -67,66 +39,32 @@ public abstract class CustomDataField<T> implements Cloneable {
      *
      * @return serialized string
      */
-    @Nullable
-    protected String serializeValueToString() {
-        return String.valueOf(getValue());
+    protected fun serializeValueToString(): String? {
+        return value.toString()
     }
 
-    @NotNull
-    public String getKey() {
-        return key;
+    fun shouldDisplayInStatus(): Boolean {
+        return hasLabel()
     }
 
-    public boolean shouldDisplayInStatus() {
-        return hasLabel();
-    }
-
-    @NotNull
-    public String getLabel() {
-        if (hasLabel())
-            return label;
-        else
-            return "nil";
-    }
-
-    /**
-     * Get label as a formatted component.
-     * <p>
-     * This function is intentionally overridable by child classes.
-     *
-     * @return formatted label component.
-     */
-    @NotNull
-    public Component getLabelAsComp() {
-        return PoixpixelCustomComponents.miniMessage(getLabel());
-    }
-
-    public boolean hasLabel() {
-        return label != null;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
+    fun hasLabel(): Boolean {
+        return label != null
     }
 
     // Not used for serialization anymore. Just for human readable format.
-    @Override
-    public String toString() {
-        String out = "";
+    override fun toString(): String {
+        var out = ""
 
         // Type
-        out += getTypeID();
+        out += typeID
 
         // Key
-        out += "," + getKey();
+        out += "," + key
 
         // Value
-        out += "," + getValue();
+        out += "," + value
 
-        // Label
-        out += "," + getLabel();
-
-        return out;
+        return out
     }
 
     /**
@@ -137,20 +75,15 @@ public abstract class CustomDataField<T> implements Cloneable {
      * @return whether the string can be parsed or not
      */
     // Overridable validation function
-    protected boolean canParseFromString(String strValue) {
-        return true;
-    }
-
-    public final void isValidType(String str) throws InvalidMetadataTypeException {
-        if (!canParseFromString(str))
-            throw new InvalidMetadataTypeException(this);
+    protected fun canParseFromString(strValue: String?): Boolean {
+        return true
     }
 
     /**
      * Formats and colors the value of the custom data field object.
      * @return the formatted value of this data field.
      */
-    protected abstract String displayFormattedValue();
+    protected abstract fun displayFormattedValue(): String
 
     /**
      * Get the value as a formatted component.
@@ -159,25 +92,18 @@ public abstract class CustomDataField<T> implements Cloneable {
      *
      * @return formatted component of value.
      */
-    public Component formatValueAsComp() {
-        return PoixpixelCustomComponents.miniMessage(displayFormattedValue());
+    fun formatValueAsComp(): Component? {
+        return PoixpixelCustomComponents.miniMessage(displayFormattedValue())
     }
 
-    @Override
-    public boolean equals(Object rhs) {
-        if (rhs instanceof CustomDataField)
-            return ((CustomDataField<?>) rhs).getKey().equals(this.getKey());
-
-        return false;
+    override fun equals(rhs: Any?): Boolean {
+        return if (rhs is CustomDataField<*>) rhs.key == key else false
     }
 
-    @Override
-    public int hashCode() {
+    override fun hashCode(): Int {
         // Use the key as a unique id
-        return getKey().hashCode();
+        return key.hashCode()
     }
 
-    @NotNull
-    public abstract CustomDataField<T> clone();
-
+    abstract override fun clone(): CustomDataField<T>
 }

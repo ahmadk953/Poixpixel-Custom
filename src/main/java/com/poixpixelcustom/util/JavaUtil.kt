@@ -1,13 +1,8 @@
-package com.poixpixelcustom.util;
+package com.poixpixelcustom.util
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*
 
-public class JavaUtil {
-
+object JavaUtil {
     /**
      * Recursively check if the interface inherits the super interface. Returns
      * false if not an interface. Returns true if sup = sub.
@@ -16,32 +11,26 @@ public class JavaUtil {
      * @param sub The possible subinterface of the super interface.
      * @return true if it is a subinterface.
      */
-
-    public static boolean isSubInterface(Class<?> sup, Class<?> sub) {
-
-        if (sup.isInterface() && sub.isInterface()) {
-            if (sup.equals(sub))
-                return true;
-            for (Class<?> c : sub.getInterfaces())
-                if (isSubInterface(sup, c))
-                    return true;
+    fun isSubInterface(sup: Class<*>, sub: Class<*>): Boolean {
+        if (sup.isInterface && sub.isInterface) {
+            if (sup == sub) return true
+            for (c in sub.interfaces) if (isSubInterface(sup, c)) return true
         }
-        return false;
+        return false
     }
 
-    public static List<String> readTextFromJar(String path) throws IOException {
-
-        BufferedReader fin = new BufferedReader(new InputStreamReader(JavaUtil.class.getResourceAsStream(path)));
-        String line;
-        List<String> out = new ArrayList<>();
+    @Throws(IOException::class)
+    fun readTextFromJar(path: String?): List<String> {
+        val fin = BufferedReader(InputStreamReader(JavaUtil::class.java.getResourceAsStream(path)))
+        var line: String
+        val out: MutableList<String> = ArrayList()
         try {
-            while ((line = fin.readLine()) != null)
-                out.add(line);
-        } catch (IOException e) {
-            throw new IOException(e.getCause());
+            while (fin.readLine().also { line = it } != null) out.add(line)
+        } catch (e: IOException) {
+            throw IOException(e.cause)
         } finally {
-            fin.close();
+            fin.close()
         }
-        return out;
+        return out
     }
 }

@@ -1,340 +1,177 @@
-package com.poixpixelcustom;
+package com.poixpixelcustom
 
-import com.earth2me.essentials.Essentials;
-import com.poixpixelcustom.Exceptions.Initialization.PoixpixelCustomInitException;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.milkbowl.vault.chat.Chat;
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
-import net.milkbowl.vault.permission.Permission;
+import com.earth2me.essentials.Essentials
+import com.poixpixelcustom.Commands.EnrichCommand
+import com.poixpixelcustom.util.BukkitTools
+import com.poixpixelcustom.util.Version
+import net.kyori.adventure.platform.bukkit.BukkitAudiences
+import net.milkbowl.vault.chat.Chat
+import net.milkbowl.vault.economy.Economy
+import net.milkbowl.vault.permission.Permission
+import org.bstats.bukkit.Metrics
+import org.bstats.charts.SimplePie
+import org.bukkit.Bukkit
+import org.bukkit.command.Command
+import org.bukkit.command.CommandMap
+import org.bukkit.plugin.Plugin
+import org.bukkit.plugin.java.JavaPlugin
+import java.util.concurrent.Callable
+import java.util.logging.Logger
 
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.SimplePie;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+class PoixpixelCustom : JavaPlugin() {
+    val version = description.version
+    private val errors: List<PoixpixelCustom> = ArrayList()
+    private val essentials: Essentials? = null
+    var isCitizens2 = false
+    private var pluginsFound = 0
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.poixpixelcustom.Commands.*;
-import com.poixpixelcustom.util.*;
-import com.poixpixelcustom.PoixpixelCustomSettings;
-import com.poixpixelcustom.Config.*;
-import com.poixpixelcustom.Confirmations.*;
-import com.poixpixelcustom.Event.*;
-import com.poixpixelcustom.Exceptions.*;
-import com.poixpixelcustom.Object.*;
-import com.poixpixelcustom.PoixpixelCustomMessaging;
-import com.poixpixelcustom.db.*;
-
-public final class PoixpixelCustom extends JavaPlugin {
-
-    private static final Logger log = Logger.getLogger("Minecraft");
-    private static final Version OLDEST_MC_VER_SUPPORTED = Version.fromString("1.19");
-    private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
-    private static PoixpixelCustom plugin;
-    private static BukkitAudiences adventure;
-    private final String version = this.getDescription().getVersion();
-    private final List<PoixpixelCustomInitException.PoixpixelCustomError> errors = new ArrayList<>();
-    private Essentials essentials = null;
-    private static Economy econ = null;
-    private static Permission perms = null;
-    private static Chat chat = null;
-    private boolean citizens2 = false;
-    private int pluginsFound = 0;
-
-    public PoixpixelCustom() {
-        plugin = this;
+    init {
+        plugin = this
     }
 
-    /**
-     * @return the PoixpixelCustom instance
-     */
-    @NotNull
-    public static PoixpixelCustom getPlugin() {
-        if (plugin == null)
-            throw new IllegalStateException("Attempted to use getPlugin() while the plugin is null, are you shading PoixpixelCustom?");
+    override fun onEnable() {
+        BukkitTools.initialize(this)
+        // Load the foundation of PoixpixelCustom, containing config, locales, database, and economy.
+        loadFoundation(false)
 
-        return plugin;
+        // Setup bukkit command interfaces
+        registerSpecialCommands()
+        registerCommands()
+
+        // Add custom metrics charts.
+        addMetricsCharts()
+
+        adventure = BukkitAudiences.create(this)
+        checkPlugins()
     }
 
-    @Override
-    public void onEnable() {
-
-        BukkitTools.initialize(this);
-
-        try {
-            // Load the foundation of PoixpixelCustom, containing config, locales, database, and economy.
-            loadFoundation(false);
-
-            // Setup bukkit command interfaces
-            registerSpecialCommands();
-            registerCommands();
-
-            // Add custom metrics charts.
-            addMetricsCharts();
-        } catch (PoixpixelCustomInitException pcie) {
-            addError(pcie.getError());
-            getLogger().log(Level.SEVERE, pcie.getMessage(), pcie);
-
-        }
-
-        adventure = BukkitAudiences.create(this);
-
-        checkPlugins();
-
-
-    }
-
-    @Override
-    public void onDisable() {
-
+    override fun onDisable() {
         if (adventure != null) {
-            adventure.close();
-            adventure = null;
+            adventure!!.close()
+            adventure = null
         }
-
-        if (!isError()){
-            log.info(String.format("[%s] Disabled Version %s", getDescription().getName(), getDescription().getVersion()));
-        } else {
-            log.warning(String.format("[%s] Disabled Version %s with 1 or more errors", getDescription().getName(), getDescription().getVersion()));
-        }
-
+        log.info(String.format("[%s] Disabled Version %s", description.name, description.version))
     }
 
-    private void registerSpecialCommands() {
-        List<Command> commands = new ArrayList<>(4);
-        try {
-            final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-
-            bukkitCommandMap.setAccessible(true);
-            CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
-
-            commandMap.registerAll("poixpixelcustom", commands);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new PoixpixelCustomInitException("An issue has occured while registering custom commands.", PoixpixelCustomInitException.PoixpixelCustomError.OTHER, e);
-        }
+    private fun registerSpecialCommands() {
+        val commands: List<Command> = ArrayList(4)
+        val bukkitCommandMap = Bukkit.getServer().javaClass.getDeclaredField("commandMap")
+        bukkitCommandMap.isAccessible = true
+        val commandMap = bukkitCommandMap[Bukkit.getServer()] as CommandMap
+        commandMap.registerAll("poixpixelcustom", commands)
     }
 
-    private void registerCommands() {
-        this.getCommand("enrich").setExecutor(new EnrichCommand());
-        getLogger().info("Added the Enrich command.");
-        this.getCommand("test-economy").setExecutor(new TestEconomyCommand());
-        getLogger().info("Added the Test-Economy command.");
-        this.getCommand("test-permission").setExecutor(new TestPermissionCommand());
-        getLogger().info("Added the Test-Permission command.");
+    private fun registerCommands() {
+        getCommand("enrich")!!.setExecutor(EnrichCommand())
+        logger.info("Added the Enrich command.")
+        //this.getCommand("test-economy").setExecutor(new TestEconomyCommand());
+        //getLogger().info("Added the Test-Economy command.");
+        //this.getCommand("test-permission").setExecutor(new TestPermissionCommand());
+        //getLogger().info("Added the Test-Permission command.");
     }
 
-
-    private void addMetricsCharts() {
+    private fun addMetricsCharts() {
         /*
          * Register bStats Metrics
          */
-        Metrics metrics = new Metrics(this, 2244);
-
-        metrics.addCustomChart(new SimplePie("server_type", () -> {
-            if (Bukkit.getServer().getName().equalsIgnoreCase("paper"))
-                return "Paper";
-            else if (Bukkit.getServer().getName().equalsIgnoreCase("craftbukkit")) {
-                if (isSpigotOrDerivative())
-                    return "Spigot";
-                else
-                    return "CraftBukkit";
+        val metrics = Metrics(this, 2244)
+        metrics.addCustomChart(SimplePie("server_type", Callable {
+            if (Bukkit.getServer().name.equals("paper", ignoreCase = true)) return@Callable "Paper" else if (Bukkit.getServer().name.equals("craftbukkit", ignoreCase = true)) {
+                if (isSpigotOrDerivative) return@Callable "Spigot" else return@Callable "CraftBukkit"
             }
-            return "Unknown";
-        }));
-
+            "Unknown"
+        }))
     }
 
-    public void loadFoundation(boolean reload) {
-        if (!setupEconomy() ) {
-            log.warning(String.format("[%s] - No Vault dependency found! Plugin might run with limited functionality.", getDescription().getName()));
-            return;
+    fun loadFoundation(reload: Boolean) {
+        if (!setupEconomy()) {
+            log.warning(String.format("[%s] - No Vault dependency found! Plugin might run with limited functionality.", description.name))
+            return
         }
-        setupPermissions();
-        setupChat();
-        loadDatabaseConfig(reload);
-        loadConfig(reload);
+        setupPermissions()
+        setupChat()
     }
 
-    private boolean setupEconomy() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
+    private fun setupEconomy(): Boolean {
+        if (server.pluginManager.getPlugin("Vault") == null) {
+            return false
         }
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
-        econ = rsp.getProvider();
-        return econ != null;
+        val rsp = server.servicesManager.getRegistration(Economy::class.java)
+                ?: return false
+        economy = rsp.provider
+        return economy != null
     }
 
-    private boolean setupChat() {
-        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
-        chat = rsp.getProvider();
-        return chat != null;
+    private fun setupChat(): Boolean {
+        val rsp = server.servicesManager.getRegistration(Chat::class.java)
+        chat = rsp!!.provider
+        return chat != null
     }
 
-    private boolean setupPermissions() {
-        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        perms = rsp.getProvider();
-        return perms != null;
+    private fun setupPermissions(): Boolean {
+        val rsp = server.servicesManager.getRegistration(Permission::class.java)
+        permissions = rsp!!.provider
+        return permissions != null
     }
 
-    public static Economy getEconomy() {
-        return econ;
-    }
-
-    public static Permission getPermissions() {
-        return perms;
-    }
-
-    public static Chat getChat() {
-        return chat;
-    }
-
-    private void loadDatabaseConfig(boolean reload) {
-        DatabaseConfig.loadDatabaseConfig(getDataFolder().toPath().resolve("settings").resolve("database.yml"));
-        if (reload) {
-            // If Towny is in Safe Mode (because of localization) turn off Safe Mode.
-            if (isError(PoixpixelCustomInitException.PoixpixelCustomError.DATABASE_CONFIG)) {
-                removeError(PoixpixelCustomInitException.PoixpixelCustomError.DATABASE_CONFIG);
-            }
-        }
-    }
-
-
-    private void checkPlugins() {
-
-        plugin.getLogger().info("Searching for third-party plugins...");
-        String ecowarn = "";
-        List<String> addons = new ArrayList<>();
-        Plugin test;
+    private fun checkPlugins() {
+        plugin.logger.info("Searching for third-party plugins...")
+        val ecowarn = ""
+        val addons: MutableList<String> = ArrayList()
+        var test: Plugin?
 
         /*
          * Check add-ons and third-party plugins we use.
-         */
-
-        test = getServer().getPluginManager().getPlugin("Vault");
+         */test = server.pluginManager.getPlugin("Vault")
         if (test != null) {
-            addons.add(String.format("%s v%s", "Vault", test.getDescription().getVersion()));
-            pluginsFound = pluginsFound + 1;
+            addons.add(String.format("%s v%s", "Vault", test.description.version))
+            pluginsFound = pluginsFound + 1
         }
-
-        test = getServer().getPluginManager().getPlugin("Essentials");
+        test = server.pluginManager.getPlugin("Essentials")
         if (test == null) {
-            PoixpixelCustomSettings.setUsingEssentials(false);
-        } else if (PoixpixelCustomSettings.isUsingEssentials()) {
-            this.essentials = (Essentials) test;
-            addons.add(String.format("%s v%s", "Essentials", test.getDescription().getVersion()));
-            pluginsFound = pluginsFound + 1;
+            //PoixpixelCustomSettings.setUsingEssentials(false);
+            pluginsFound = pluginsFound - 0
         }
-
         if (pluginsFound > 0) {
-            getLogger().info("Add-on plugins found!");
-            getLogger().info(pluginsFound + " add-on plugins found");
+            logger.info("Add-on plugins found!")
+            logger.info("$pluginsFound add-on plugins found")
         } else {
-            getLogger().warning("No add-on plugins were found.");
-            getLogger().warning("The plugin might run with limited functionality.");
-        }
-
-    }
-
-    private void loadConfig(boolean reload) {
-        PoixpixelCustomSettings.loadConfig(getDataFolder().toPath().resolve("settings").resolve("config.yml"), getVersion());
-        if (reload) {
-            PoixpixelCustomMessaging.sendMsg("msg_reloaded_config");
+            logger.warning("No add-on plugins were found.")
+            logger.warning("The plugin might run with limited functionality.")
         }
     }
 
-    public boolean isEssentials() {
-
-        return (PoixpixelCustomSettings.isUsingEssentials() && (this.essentials != null));
+    fun setCitizens2(b: Boolean): PoixpixelCustom {
+        return this
     }
 
-    public Essentials getEssentials() throws PoixpixelCustomException {
+    companion object {
+        private val log = Logger.getLogger("Minecraft")
+        private val OLDEST_MC_VER_SUPPORTED: Version = Version.Companion.fromString("1.19")
+        private val CUR_BUKKIT_VER: Version = Version.Companion.fromString(Bukkit.getBukkitVersion())
+        private lateinit var plugin: PoixpixelCustom
+        private var adventure: BukkitAudiences? = null
+        var economy: Economy? = null
+            private set
+        var permissions: Permission? = null
+            private set
+        var chat: Chat? = null
+            private set
 
-        if (essentials == null)
-            throw new PoixpixelCustomException("Essentials is not installed, or not enabled!");
-        else
-            return essentials;
-    }
-
-    public World getServerWorld(String name) throws NotRegisteredException {
-        World world = BukkitTools.getWorld(name);
-
-        if (world == null)
-            throw new NotRegisteredException(String.format("A world called '$%s' has not been registered.", name));
-
-        return world;
-    }
-
-    private static boolean isSpigotOrDerivative() {
-        try {
-            Class.forName("org.bukkit.entity.Player$Spigot");
-            return true;
-        } catch (ClassNotFoundException tr) {
-            return false;
+        /**
+         * @return the PoixpixelCustom instance
+         */
+        fun getPlugin(): PoixpixelCustom {
+            checkNotNull(plugin) { "Attempted to use getPlugin() while the plugin is null, are you shading PoixpixelCustom?" }
+            return plugin
         }
 
+        private val isSpigotOrDerivative: Boolean
+            private get() = try {
+                Class.forName("org.bukkit.entity.Player\$Spigot")
+                true
+            } catch (tr: ClassNotFoundException) {
+                false
+            }
     }
-
-    public boolean isCitizens2() {
-        return citizens2;
-    }
-
-    public void setCitizens2(boolean b) {
-        citizens2 = b;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void addError(@NotNull PoixpixelCustomInitException.PoixpixelCustomError error) {
-        errors.add(error);
-    }
-
-    public boolean isError() {
-        return !errors.isEmpty();
-    }
-
-    private boolean isError(@NotNull PoixpixelCustomInitException.PoixpixelCustomError error) {
-        return errors.contains(error);
-    }
-
-    private void removeError(@NotNull PoixpixelCustomInitException.PoixpixelCustomError error) {
-        errors.remove(error);
-    }
-
-    @NotNull
-    public List<PoixpixelCustomInitException.PoixpixelCustomError> getErrors() {
-        return errors;
-    }
-
 }

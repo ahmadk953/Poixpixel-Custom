@@ -1,5 +1,5 @@
-package com.poixpixelcustom.Object;
+package com.poixpixelcustom.Object
 
-public interface Savable {
-    void save();
+interface Savable {
+    fun save()
 }

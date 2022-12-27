@@ -1,80 +1,57 @@
-package com.poixpixelcustom.util;
+package com.poixpixelcustom.util
 
-import com.google.common.base.Charsets;
-import com.poixpixelcustom.Event.CancellablePoixpixelCustomEvent;
-import com.poixpixelcustom.Exceptions.CancelledEventException;
-import com.poixpixelcustom.PoixpixelCustom;
-import com.poixpixelcustom.PoixpixelCustomSettings;
+import com.google.common.base.Charsets
+import com.poixpixelcustom.PoixpixelCustom
+import net.citizensnpcs.api.CitizensAPI
+import org.bukkit.*
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Entity
+import org.bukkit.entity.Player
+import org.bukkit.event.Cancellable
+import org.bukkit.event.Event
+import org.bukkit.plugin.PluginManager
+import org.bukkit.scheduler.BukkitScheduler
+import org.bukkit.scoreboard.Criteria
+import org.bukkit.scoreboard.Objective
+import org.bukkit.scoreboard.Scoreboard
+import java.util.*
+import java.util.stream.Collectors
 
-import net.citizensnpcs.api.CitizensAPI;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Server;
-import org.bukkit.World;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scoreboard.Criteria;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static org.bukkit.Bukkit.getServer;
-
-public class BukkitTools {
-    private static PoixpixelCustom plugin = null;
-    private static Server server = null;
-
-    public static void initialize(PoixpixelCustom plugin) {
-        BukkitTools.plugin = plugin;
-        BukkitTools.server = plugin.getServer();
+object BukkitTools {
+    private var plugin: PoixpixelCustom? = null
+    private var server: Server? = null
+    fun initialize(plugin: PoixpixelCustom) {
+        BukkitTools.plugin = plugin
+        server = plugin.server
     }
 
-    /**
-     * Get an array of all online players
-     *
-     * @return array of online players
-     */
-    public static Collection<? extends Player> getOnlinePlayers() {
-        return getServer().getOnlinePlayers();
-    }
+    val onlinePlayers: Collection<Player>
+        /**
+         * Get an array of all online players
+         *
+         * @return array of online players
+         */
+        get() = getServer()!!.onlinePlayers
 
-    public static List<Player> matchPlayer(String name) {
-        List<Player> matchedPlayers = new ArrayList<>();
-
-        for (Player iterPlayer : Bukkit.getOnlinePlayers()) {
-            String iterPlayerName = iterPlayer.getName();
+    fun matchPlayer(name: String): List<Player> {
+        val matchedPlayers: MutableList<Player> = java.util.ArrayList()
+        for (iterPlayer in Bukkit.getOnlinePlayers()) {
+            val iterPlayerName = iterPlayer.name
             if (checkCitizens(iterPlayer)) {
-                continue;
+                continue
             }
-            if (name.equalsIgnoreCase(iterPlayerName)) {
+            if (name.equals(iterPlayerName, ignoreCase = true)) {
                 // Exact match
-                matchedPlayers.clear();
-                matchedPlayers.add(iterPlayer);
-                break;
+                matchedPlayers.clear()
+                matchedPlayers.add(iterPlayer)
+                break
             }
-            if (iterPlayerName.toLowerCase(java.util.Locale.ENGLISH).contains(name.toLowerCase(java.util.Locale.ENGLISH))) {
+            if (iterPlayerName.lowercase().contains(name.lowercase())) {
                 // Partial match
-                matchedPlayers.add(iterPlayer);
+                matchedPlayers.add(iterPlayer)
             }
         }
-
-        return matchedPlayers;
+        return matchedPlayers
     }
 
     /**
@@ -84,35 +61,26 @@ public class BukkitTools {
      * @param name - Resident/Player name to get a UUID for.
      * @return UUID of player or null if the player is not in the cache.
      */
-    public static UUID getUUIDSafely(String name) {
-        if (hasPlayedBefore(name))
-            return getOfflinePlayer(name).getUniqueId();
-        else
-            return null;
+    fun getUUIDSafely(name: String?): UUID? {
+        return if (hasPlayedBefore(name)) getOfflinePlayer(name).uniqueId else null
     }
 
-    @Nullable
-    public static Player getPlayerExact(String name) {
-        return getServer().getPlayerExact(name);
+    fun getPlayerExact(name: String?): Player? {
+        return getServer()!!.getPlayerExact(name!!)
     }
 
-    @Nullable
-    public static Player getPlayer(String playerId) {
-        return getServer().getPlayer(playerId);
+    fun getPlayer(playerId: String?): Player? {
+        return getServer()!!.getPlayer(playerId!!)
     }
 
-    @Nullable
-    public static Player getPlayer(UUID playerUUID) {
-        return server.getPlayer(playerUUID);
+    fun getPlayer(playerUUID: UUID?): Player? {
+        return server!!.getPlayer(playerUUID!!)
     }
 
-    public static Collection<? extends Player> getVisibleOnlinePlayers(CommandSender sender) {
-        if (!(sender instanceof Player player))
-            return Bukkit.getOnlinePlayers();
-
-        return Bukkit.getOnlinePlayers().stream()
-                .filter(player::canSee)
-                .collect(Collectors.toCollection(ArrayList::new));
+    fun getVisibleOnlinePlayers(sender: CommandSender): Collection<Player> {
+        return if (sender !is Player) Bukkit.getOnlinePlayers() else Bukkit.getOnlinePlayers().stream()
+                .filter { player: Player? -> sender.canSee(player!!) }
+                .collect(Collectors.toCollection { ArrayList() })
     }
 
     /**
@@ -121,35 +89,29 @@ public class BukkitTools {
      * @param name the name of the player.
      * @return a true value if online
      */
-    public static boolean isOnline(String name) {
-        return Bukkit.getPlayerExact(name) != null;
+    fun isOnline(name: String?): Boolean {
+        return Bukkit.getPlayerExact(name!!) != null
     }
 
-    public static List<World> getWorlds() {
-        return getServer().getWorlds();
+    val worlds: List<World>
+        get() = getServer()!!.worlds
+
+    fun getWorld(name: String?): World? {
+        return getServer()!!.getWorld(name!!)
     }
 
-    public static World getWorld(String name) {
-        return getServer().getWorld(name);
+    fun getWorld(worldUID: UUID?): World? {
+        return getServer()!!.getWorld(worldUID!!)
     }
 
-    public static World getWorld(UUID worldUID) {
-        return getServer().getWorld(worldUID);
+    fun getServer(): Server? {
+        synchronized(server!!) { return server }
     }
 
-    public static Server getServer() {
-        synchronized(server) {
-            return server;
-        }
-    }
-
-    public static PluginManager getPluginManager() {
-        return getServer().getPluginManager();
-    }
-
-    public static BukkitScheduler getScheduler() {
-        return getServer().getScheduler();
-    }
+    val pluginManager: PluginManager
+        get() = getServer()!!.pluginManager
+    val scheduler: BukkitScheduler
+        get() = getServer()!!.scheduler
 
     /**
      * Accepts a Runnable object and a delay (-1 for no delay)
@@ -158,92 +120,87 @@ public class BukkitTools {
      * @param delay ticks to delay starting
      * @return -1 if unable to schedule or an index to the task is successful.
      */
-    public static int scheduleSyncDelayedTask(Runnable task, long delay) {
-        return getScheduler().scheduleSyncDelayedTask(plugin, task, delay);
+    fun scheduleSyncDelayedTask(task: Runnable?, delay: Long): Int {
+        return scheduler.scheduleSyncDelayedTask(plugin!!, task!!, delay)
     }
 
     /**
-     * Accepts a {@link Runnable} object and a delay (-1 for no delay)
+     * Accepts a [Runnable] object and a delay (-1 for no delay)
      *
      * @param task - Runnable
-     * @param delay - ticks to delay starting ({@link Long})
+     * @param delay - ticks to delay starting ([Long])
      * @return -1 if unable to schedule or an index to the task is successful.
      */
-    public static int scheduleAsyncDelayedTask(Runnable task, long delay) {
-        return getScheduler().runTaskLaterAsynchronously(plugin, task, delay).getTaskId();
+    fun scheduleAsyncDelayedTask(task: Runnable?, delay: Long): Int {
+        return scheduler.runTaskLaterAsynchronously(plugin!!, task!!, delay).taskId
     }
 
     /**
-     * Accepts a {@link Runnable} object with a delay/repeat (-1 for no delay)
+     * Accepts a [Runnable] object with a delay/repeat (-1 for no delay)
      *
      * @param task runnable object
-     * @param delay ticks to delay starting ({@link Long})
-     * @param repeat ticks to repeat after ({@link Long})
+     * @param delay ticks to delay starting ([Long])
+     * @param repeat ticks to repeat after ([Long])
      * @return -1 if unable to schedule or an index to the task is successful.
      */
-    public static int scheduleSyncRepeatingTask(Runnable task, long delay, long repeat) {
-        return getScheduler().scheduleSyncRepeatingTask(plugin, task, delay, repeat);
+    fun scheduleSyncRepeatingTask(task: Runnable?, delay: Long, repeat: Long): Int {
+        return scheduler.scheduleSyncRepeatingTask(plugin!!, task!!, delay, repeat)
     }
 
     /**
-     * Accepts a {@link Runnable} object with a delay/repeat (-1 for no delay)
+     * Accepts a [Runnable] object with a delay/repeat (-1 for no delay)
      *
      * @param task runnable object
-     * @param delay ticks to delay starting ({@link Long})
-     * @param repeat ticks to repeat after ({@link Long})
+     * @param delay ticks to delay starting ([Long])
+     * @param repeat ticks to repeat after ([Long])
      * @return -1 if unable to schedule or an index to the task is successful.
      */
-    public static int scheduleAsyncRepeatingTask(Runnable task, long delay, long repeat) {
-        return getScheduler().runTaskTimerAsynchronously(plugin, task, delay, repeat).getTaskId();
+    fun scheduleAsyncRepeatingTask(task: Runnable?, delay: Long, repeat: Long): Int {
+        return scheduler.runTaskTimerAsynchronously(plugin!!, task!!, delay, repeat).taskId
+    }
+
+    val playersPerWorld: HashMap<String, Int>
+        /**
+         * Count the number of players online in each world
+         *
+         * @return Map of world to online players.
+         */
+        get() {
+            val m = HashMap<String, Int>()
+            for (world in getServer()!!.worlds) m[world.name] = 0
+            for (player in getServer()!!.onlinePlayers) m[player.world.name] = m[player.world.name]!! + 1
+            return m
+        }
+
+    @Suppress("deprecation")
+    fun hasPlayedBefore(name: String?): Boolean {
+        return getServer()!!.getOfflinePlayer(name!!).hasPlayedBefore()
     }
 
     /**
-     * Count the number of players online in each world
-     *
-     * @return Map of world to online players.
-     */
-    public static HashMap<String, Integer> getPlayersPerWorld() {
-
-        HashMap<String, Integer> m = new HashMap<>();
-        for (World world : getServer().getWorlds())
-            m.put(world.getName(), 0);
-        for (Player player :  getServer().getOnlinePlayers())
-            m.put(player.getWorld().getName(), m.get(player.getWorld().getName()) + 1);
-        return m;
-    }
-
-    @SuppressWarnings("deprecation")
-    public static boolean hasPlayedBefore(String name) {
-        return getServer().getOfflinePlayer(name).hasPlayedBefore();
-    }
-
-    /**
-     * Do not use without first using {@link #hasPlayedBefore(String)}
+     * Do not use without first using [.hasPlayedBefore]
      *
      * @param name - name of resident
      * @return OfflinePlayer
      */
-    @SuppressWarnings("deprecation")
-    public static OfflinePlayer getOfflinePlayer(String name) {
-
-        return Bukkit.getOfflinePlayer(name);
+    @Suppress("deprecation")
+    fun getOfflinePlayer(name: String?): OfflinePlayer {
+        return Bukkit.getOfflinePlayer(name!!)
     }
 
-    public static OfflinePlayer getOfflinePlayerForVault(String name) {
-
-        return Bukkit.getOfflinePlayer(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)));
+    fun getOfflinePlayerForVault(name: String): OfflinePlayer {
+        return Bukkit.getOfflinePlayer(UUID.nameUUIDFromBytes("OfflinePlayer:$name".toByteArray(Charsets.UTF_8)))
     }
 
-    public static String convertCoordtoXYZ(Location loc) {
-        return loc.getWorld().getName() + " " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
+    fun convertCoordtoXYZ(loc: Location): String {
+        return loc.world.name + " " + loc.blockX + "," + loc.blockY + "," + loc.blockZ
     }
 
-    public static List<String> getWorldNames() {
-        return getWorlds().stream().map(World::getName).collect(Collectors.toList());
-    }
+    val worldNames: List<String>
+        get() = worlds.stream().map { obj: World -> obj.name }.collect(Collectors.toList())
 
-    public static List<String> getWorldNames(boolean lowercased) {
-        return lowercased ? getWorlds().stream().map(world -> world.getName().toLowerCase()).collect(Collectors.toList()) : getWorldNames();
+    fun getWorldNames(lowercased: Boolean): List<String> {
+        return if (lowercased) worlds.stream().map { world: World -> world.name.lowercase(Locale.getDefault()) }.collect(Collectors.toList()) else worldNames
     }
 
     /**
@@ -255,50 +212,35 @@ public class BukkitTools {
      * @param entity Entity to check.
      * @return true if the entity is an NPC.
      */
-    public static boolean checkCitizens(Entity entity) {
-        if (plugin.isCitizens2()) {
+    fun checkCitizens(entity: Entity?): Boolean {
+        if (plugin!!.isCitizens2) {
             try {
-                return CitizensAPI.getNPCRegistry().isNPC(entity);
-            } catch (NoClassDefFoundError e) {
-                plugin.setCitizens2(false);
+                return CitizensAPI.getNPCRegistry().isNPC(entity)
+            } catch (e: NoClassDefFoundError) {
+                plugin!!.setCitizens2(false)
             }
-
         }
-        return false;
+        return false
     }
 
-    @SuppressWarnings("deprecation")
-    public static Objective objective(Scoreboard board, @NotNull String name, @NotNull String displayName) {
-        Objective objective;
-        objective = board.registerNewObjective(name, Criteria.DUMMY, displayName);
-        return objective;
+    @Suppress("deprecation")
+    fun objective(board: Scoreboard, name: String, displayName: String): Objective {
+        val objective: Objective
+        objective = board.registerNewObjective(name, Criteria.DUMMY, displayName)
+        return objective
     }
 
     /**
      * @param event The event to call
-     * @return {@code true} if the event is cancellable and was cancelled, otherwise {@code false}.
+     * @return `true` if the event is cancellable and was cancelled, otherwise `false`.
      */
-    public static boolean isEventCancelled(@NotNull Event event) {
-        fireEvent(event);
-
-        if (event instanceof Cancellable cancellable)
-            return cancellable.isCancelled();
-        else
-            return false;
+    fun isEventCancelled(event: Event): Boolean {
+        fireEvent(event)
+        return if (event is Cancellable) event.isCancelled else false
     }
 
-    /**
-     * @param event CancellablePoixpixelCustomEvent to be fired which might be cancelled.
-     * @throws CancelledEventException with the Event's cancelMessage.
-     */
-    public static void ifCancelledThenThrow(@NotNull CancellablePoixpixelCustomEvent event) throws CancelledEventException {
-        fireEvent(event);
-        if (event.isCancelled())
-            throw new CancelledEventException(event);
-    }
-
-    public static void fireEvent(@NotNull Event event) {
-        Bukkit.getPluginManager().callEvent(event);
+    fun fireEvent(event: Event) {
+        Bukkit.getPluginManager().callEvent(event)
     }
 
     /**
@@ -307,10 +249,8 @@ public class BukkitTools {
      * @param name String which should be a material.
      * @return String name of the material or null if no match could be made.
      */
-    @Nullable
-    public static String matchMaterialName(String name) {
-        Material mat = Material.matchMaterial(name.trim().toUpperCase(Locale.ROOT));
-        return mat == null ? null : mat.name();
+    fun matchMaterialName(name: String): String? {
+        val mat = Material.matchMaterial(name.trim { it <= ' ' }.uppercase())
+        return mat?.name
     }
-
 }

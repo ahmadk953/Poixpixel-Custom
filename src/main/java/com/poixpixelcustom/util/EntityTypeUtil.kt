@@ -1,17 +1,11 @@
-package com.poixpixelcustom.util;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+package com.poixpixelcustom.util
 
-import com.poixpixelcustom.PoixpixelCustomSettings;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.bukkit.Material
+import org.bukkit.entity.EntityType
+import java.util.*
 
-public class EntityTypeUtil {
-    private static final List<EntityType> ExplosiveEntityTypes = Arrays.asList(
+object EntityTypeUtil {
+    private val ExplosiveEntityTypes = Arrays.asList(
             EntityType.CREEPER,
             EntityType.DRAGON_FIREBALL,
             EntityType.FIREBALL,
@@ -21,31 +15,25 @@ public class EntityTypeUtil {
             EntityType.PRIMED_TNT,
             EntityType.WITHER,
             EntityType.WITHER_SKULL,
-            EntityType.ENDER_CRYSTAL);
-
-    private static final List<EntityType> ExplosivePVMEntityTypes = Arrays.asList(
+            EntityType.ENDER_CRYSTAL)
+    private val ExplosivePVMEntityTypes = Arrays.asList(
             EntityType.CREEPER,
             EntityType.DRAGON_FIREBALL,
             EntityType.FIREBALL,
             EntityType.SMALL_FIREBALL,
             EntityType.WITHER,
             EntityType.WITHER_SKULL,
-            EntityType.ENDER_CRYSTAL);
-
-    private static final List<EntityType> ExplosivePVPEntityTypes = Arrays.asList(
+            EntityType.ENDER_CRYSTAL)
+    private val ExplosivePVPEntityTypes = Arrays.asList(
             EntityType.FIREWORK,
             EntityType.MINECART_TNT,
             EntityType.PRIMED_TNT,
-            EntityType.ENDER_CRYSTAL);
+            EntityType.ENDER_CRYSTAL)
 
-    public static boolean isInstanceOfAny(List<Class<?>> classes, Object obj) {
-
-        for (Class<?> c : classes)
-            if (c.isInstance(obj))
-                return true;
-        return false;
+    fun isInstanceOfAny(classes: List<Class<*>>, obj: Any?): Boolean {
+        for (c in classes) if (c.isInstance(obj)) return true
+        return false
     }
-
 
     /**
      * Helper method to get a Material from an Entity.
@@ -54,31 +42,30 @@ public class EntityTypeUtil {
      * @param entityType EntityType to gain a Material value for.
      * @return null or a suitable Material.
      */
-    @Nullable
-    public static Material parseEntityToMaterial(EntityType entityType) {
-        return switch (entityType) {
-            case AXOLOTL -> Material.AXOLOTL_BUCKET;
-            case COD -> Material.COD;
-            case SALMON -> Material.SALMON;
-            case PUFFERFISH -> Material.PUFFERFISH;
-            case TROPICAL_FISH -> Material.TROPICAL_FISH;
-            case TADPOLE -> Material.TADPOLE_BUCKET;
-            case ITEM_FRAME -> Material.ITEM_FRAME;
-            case GLOW_ITEM_FRAME -> Material.GLOW_ITEM_FRAME;
-            case PAINTING -> Material.PAINTING;
-            case ARMOR_STAND -> Material.ARMOR_STAND;
-            case LEASH_HITCH -> Material.LEAD;
-            case ENDER_CRYSTAL -> Material.END_CRYSTAL;
-            case MINECART, MINECART_MOB_SPAWNER -> Material.MINECART;
-            case MINECART_CHEST -> Material.CHEST_MINECART;
-            case MINECART_FURNACE -> Material.FURNACE_MINECART;
-            case MINECART_COMMAND -> Material.COMMAND_BLOCK_MINECART;
-            case MINECART_HOPPER -> Material.HOPPER_MINECART;
-            case MINECART_TNT -> Material.TNT_MINECART;
-            case BOAT -> Material.OAK_BOAT;
-            case CHEST_BOAT -> Material.OAK_CHEST_BOAT;
-            default -> null;
-        };
+    fun parseEntityToMaterial(entityType: EntityType?): Material? {
+        return when (entityType) {
+            EntityType.AXOLOTL -> Material.AXOLOTL_BUCKET
+            EntityType.COD -> Material.COD
+            EntityType.SALMON -> Material.SALMON
+            EntityType.PUFFERFISH -> Material.PUFFERFISH
+            EntityType.TROPICAL_FISH -> Material.TROPICAL_FISH
+            EntityType.TADPOLE -> Material.TADPOLE_BUCKET
+            EntityType.ITEM_FRAME -> Material.ITEM_FRAME
+            EntityType.GLOW_ITEM_FRAME -> Material.GLOW_ITEM_FRAME
+            EntityType.PAINTING -> Material.PAINTING
+            EntityType.ARMOR_STAND -> Material.ARMOR_STAND
+            EntityType.LEASH_HITCH -> Material.LEAD
+            EntityType.ENDER_CRYSTAL -> Material.END_CRYSTAL
+            EntityType.MINECART, EntityType.MINECART_MOB_SPAWNER -> Material.MINECART
+            EntityType.MINECART_CHEST -> Material.CHEST_MINECART
+            EntityType.MINECART_FURNACE -> Material.FURNACE_MINECART
+            EntityType.MINECART_COMMAND -> Material.COMMAND_BLOCK_MINECART
+            EntityType.MINECART_HOPPER -> Material.HOPPER_MINECART
+            EntityType.MINECART_TNT -> Material.TNT_MINECART
+            EntityType.BOAT -> Material.OAK_BOAT
+            EntityType.CHEST_BOAT -> Material.OAK_CHEST_BOAT
+            else -> null
+        }
     }
 
     /**
@@ -87,10 +74,9 @@ public class EntityTypeUtil {
      * @param defaultValue Material to use if none could be found.
      * @return The parsed material, or the fallback value.
      */
-    @NotNull
-    public static Material parseEntityToMaterial(EntityType entityType, @NotNull Material defaultValue) {
-        Material material = parseEntityToMaterial(entityType);
-        return material == null ? defaultValue : material;
+    fun parseEntityToMaterial(entityType: EntityType?, defaultValue: Material): Material {
+        val material = parseEntityToMaterial(entityType)
+        return material ?: defaultValue
     }
 
     /**
@@ -99,9 +85,8 @@ public class EntityTypeUtil {
      * @param entityType EntityType to test.
      * @return true if the EntityType will explode.
      */
-    public static boolean isExplosive(EntityType entityType) {
-
-        return ExplosiveEntityTypes.contains(entityType);
+    fun isExplosive(entityType: EntityType): Boolean {
+        return ExplosiveEntityTypes.contains(entityType)
     }
 
     /**
@@ -110,9 +95,8 @@ public class EntityTypeUtil {
      * @param entityType EntityType to test.
      * @return true if the EntityType is PVP and will explode.
      */
-    public static boolean isPVPExplosive(EntityType entityType) {
-
-        return ExplosivePVPEntityTypes.contains(entityType);
+    fun isPVPExplosive(entityType: EntityType): Boolean {
+        return ExplosivePVPEntityTypes.contains(entityType)
     }
 
     /**
@@ -121,8 +105,7 @@ public class EntityTypeUtil {
      * @param entityType EntityType to test.
      * @return true if the EntityType is PVM and will explode.
      */
-    public static boolean isPVMExplosive(EntityType entityType) {
-
-        return ExplosivePVMEntityTypes.contains(entityType);
+    fun isPVMExplosive(entityType: EntityType): Boolean {
+        return ExplosivePVMEntityTypes.contains(entityType)
     }
 }

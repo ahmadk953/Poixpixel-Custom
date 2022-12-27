@@ -1,32 +1,26 @@
-package com.poixpixelcustom.util;
+package com.poixpixelcustom.util
 
-import com.poixpixelcustom.util.Colors;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.minimessage.MiniMessage
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
+import net.kyori.adventure.text.minimessage.tag.standard.StandardTags
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+import org.jetbrains.annotations.ApiStatus
 
 /**
  * Internal utility class for common interactions with adventure components.
  */
 @ApiStatus.Internal
-public class PoixpixelCustomComponents {
-
+object PoixpixelCustomComponents {
     // A minimessage instance with no tags
-    private static final MiniMessage EMPTY = MiniMessage.builder().tags(TagResolver.empty()).build();
-
-    public static Component miniMessage(@NotNull String string) {
-        return MiniMessage.miniMessage().deserialize(Colors.translateLegacyCharacters(Colors.translateLegacyHex(string)));
+    private val EMPTY = MiniMessage.builder().tags(TagResolver.empty()).build()
+    fun miniMessage(string: String): Component {
+        return MiniMessage.miniMessage().deserialize(Colors.translateLegacyCharacters(Colors.translateLegacyHex(string))!!)
     }
 
-    public static String plain(@NotNull Component component) {
-        return PlainTextComponentSerializer.plainText().serialize(component);
+    fun plain(component: Component): String {
+        return PlainTextComponentSerializer.plainText().serialize(component)
     }
 
     /**
@@ -34,8 +28,8 @@ public class PoixpixelCustomComponents {
      * @param string The input string with legacy ampersand/section characters
      * @return The component equivalent
      */
-    public static Component legacy(@NotNull String string) {
-        return LegacyComponentSerializer.legacySection().deserialize(Colors.translateColorCodes(string));
+    fun legacy(string: String): Component {
+        return LegacyComponentSerializer.legacySection().deserialize(Colors.translateColorCodes(string)!!)
     }
 
     /**
@@ -43,8 +37,8 @@ public class PoixpixelCustomComponents {
      * @param component The component to convert
      * @return A string with legacy section characters
      */
-    public static String toLegacy(@NotNull Component component) {
-        return LegacyComponentSerializer.legacySection().serialize(component);
+    fun toLegacy(component: Component): String {
+        return LegacyComponentSerializer.legacySection().serialize(component)
     }
 
     /**
@@ -52,8 +46,8 @@ public class PoixpixelCustomComponents {
      * @param input The input
      * @return The stripped output
      */
-    public static String stripTags(@NotNull String input) {
-        return MiniMessage.miniMessage().stripTags(input);
+    fun stripTags(input: String): String {
+        return MiniMessage.miniMessage().stripTags(input)
     }
 
     /**
@@ -62,24 +56,13 @@ public class PoixpixelCustomComponents {
      * @param resolvers The resolver(s) for tags to strip from the input
      * @return The stripped output
      */
-    public static String stripTags(@NotNull String input, TagResolver... resolvers) {
-        return EMPTY.stripTags(input, resolvers);
-    }
 
-    public static String stripClickTags(@NotNull String input) {
-        return stripTags(input, StandardTags.clickEvent());
-    }
-
-    public static Component joinList(List<Component> components, Component delimiter) {
-        Component full = Component.empty();
-
-        for (int i = 0; i < components.size(); i++) {
-            full = Component.empty().append(full).append(components.get(i));
-
-            if (i != components.size() - 1)
-                full = Component.empty().append(full).append(delimiter);
+    fun joinList(components: List<Component?>, delimiter: Component?): Component {
+        var full: Component = Component.empty()
+        for (i in components.indices) {
+            full = Component.empty().append(full).append(components[i]!!)
+            if (i != components.size - 1) full = Component.empty().append(full).append(delimiter!!)
         }
-
-        return full;
+        return full
     }
 }

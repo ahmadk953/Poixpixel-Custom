@@ -1,40 +1,31 @@
-package com.poixpixelcustom.Event;
+package com.poixpixelcustom.Event
 
-import com.poixpixelcustom.PoixpixelCustom;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
+import com.poixpixelcustom.PoixpixelCustom
+import org.bukkit.Material
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerMoveEvent
+import java.util.logging.Logger
 
-import java.util.logging.Logger;
+class MovementListener(plugin: PoixpixelCustom) : Listener {
+    private val logger: Logger
 
-public class MovementListener implements Listener {
-
-    private final Logger logger;
-
-    public MovementListener(PoixpixelCustom plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        this.logger = plugin.getLogger();
+    init {
+        plugin.server.pluginManager.registerEvents(this, plugin)
+        logger = plugin.logger
     }
 
     @EventHandler
-    public void movement(PlayerMoveEvent event) {
-        Location loc = event.getPlayer().getLocation();
-        loc.setY(loc.getY() - 1);
-        Block b = loc.getBlock();
-        Material material = b.getType();
-        switch (material) {
-            case WATER:
-                b.setType(Material.WATER);
-                break;
-            case GRASS:
-                b.setType(Material.GRASS);
-                break;
-            case SAND:
-                b.setType(Material.SAND);
-                break;
+    fun movement(event: PlayerMoveEvent) {
+        val loc = event.player.location
+        loc.y = loc.y - 1
+        val b = loc.block
+        val material = b.type
+        when (material) {
+            Material.WATER -> b.type = Material.WATER
+            Material.GRASS -> b.type = Material.GRASS
+            Material.SAND -> b.type = Material.SAND
+            else -> {return}
         }
     }
 }

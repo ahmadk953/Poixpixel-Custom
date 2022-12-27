@@ -1,23 +1,14 @@
-package com.poixpixelcustom.util;
+package com.poixpixelcustom.util
 
-import co.aikar.util.LoadingIntMap;
-import com.google.common.base.Strings;
-
-import net.md_5.bungee.api.ChatColor;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
-import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import co.aikar.util.LoadingIntMap
+import com.google.common.base.Strings
+import net.md_5.bungee.api.ChatColor
+import org.jetbrains.annotations.ApiStatus
+import java.util.*
+import java.util.function.Function
+import java.util.regex.Pattern
+import java.util.stream.Collectors
+import java.util.stream.Stream
 
 /**
  * Useful functions related to strings, or arrays of them.
@@ -25,154 +16,110 @@ import org.jetbrains.annotations.NotNull;
  * @author Shade (Chris H)
  * @version 1.4
  */
+object StringMgmt {
+    val hexPattern = Pattern.compile("((&|\\{|<|)(#|§x))([a-fA-F0-9]|§[a-fA-F0-9]){6}(}|>|)")
+    val hexReplacePattern = Pattern.compile("(§x|[&{}<>§#])")
 
-public class StringMgmt {
+    @Deprecated("")
+    val ampersandPattern = Pattern.compile("(?<!\\\\)(&#[a-fA-F0-9]{6})")
 
-    public static final Pattern hexPattern = Pattern.compile("((&|\\{|<|)(#|§x))([a-fA-F0-9]|§[a-fA-F0-9]){6}(}|>|)");
-    public static final Pattern hexReplacePattern = Pattern.compile("(§x|[&{}<>§#])");
-    public static final @Deprecated Pattern ampersandPattern = Pattern.compile("(?<!\\\\)(&#[a-fA-F0-9]{6})");
-    public static final @Deprecated Pattern bracketPattern = Pattern.compile("(?<!\\\\)\\{(#[a-fA-F0-9]{6})}");
-
-    private static final Function<String, String> legacyHexFunction = (hex) -> ChatColor.of("#" + hex).toString();
-
+    @Deprecated("")
+    val bracketPattern = Pattern.compile("(?<!\\\\)\\{(#[a-fA-F0-9]{6})}")
+    private val legacyHexFunction = Function { hex: String -> ChatColor.of("#$hex").toString() }
     @ApiStatus.Internal
-    public static String translateHexColors(String string) {
-        final Matcher hexMatcher = hexPattern.matcher(string);
-
+    fun translateHexColors(string: String): String {
+        var string = string
+        val hexMatcher = hexPattern.matcher(string)
         while (hexMatcher.find()) {
-            String hex = hexMatcher.group();
-            LoadingIntMap.Feeder<Object> hexFunction = null;
-            string = string.replace((CharSequence) hex, (CharSequence) hexFunction.apply(hexReplacePattern.matcher(hex).replaceAll("")));
+            val hex = hexMatcher.group()
+            val hexFunction: LoadingIntMap.Feeder<Any>? = null
         }
-
-        return string;
+        return string
     }
 
-    public static String join(Collection<?> args) {
-        return join(args, " ");
-    }
-
-    public static String join(Collection<?> args, String separator) {
-        StringJoiner joiner = new StringJoiner(separator);
-
-        for (Object o : args) {
-            joiner.add(o.toString());
+    @JvmOverloads
+    fun join(args: Collection<*>, separator: String? = " "): String {
+        val joiner = StringJoiner(separator)
+        for (o in args) {
+            joiner.add(o.toString())
         }
-
-        return joiner.toString();
+        return joiner.toString()
     }
 
-    public static String join(Object[] arr) {
-
-        return join(arr, " ");
+    @JvmOverloads
+    fun join(arr: Array<Any>, separator: String = " "): String {
+        if (arr.size == 0) return ""
+        var out = arr[0].toString()
+        for (i in 1 until arr.size) out += separator + arr[i]
+        return out
     }
 
-    public static String join(Object[] arr, String separator) {
-
-        if (arr.length == 0)
-            return "";
-        String out = arr[0].toString();
-        for (int i = 1; i < arr.length; i++)
-            out += separator + arr[i];
-        return out;
+    fun join(map: Map<*, *>, keyValSeparator: String?, tokenSeparator: String?): String {
+        if (map.size == 0) return ""
+        val sb = StringBuilder()
+        for ((key, value) in map) sb.append(key).append(keyValSeparator).append(value.toString()).append(tokenSeparator)
+        return sb.toString()
     }
 
-    public static String join(Map<?,?> map, String keyValSeparator, String tokenSeparator) {
-        if (map.size() == 0)
-            return "";
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<?,?> entry : map.entrySet())
-            sb.append(entry.getKey()).append(keyValSeparator).append(entry.getValue().toString()).append(tokenSeparator);
-
-        return sb.toString();
+    fun repeat(sequence: String?, repetitions: Int): String {
+        return Strings.repeat(sequence, repetitions)
     }
 
-    public static String repeat(String sequence, int repetitions) {
-
-        return Strings.repeat(sequence, repetitions);
+    fun remFirstArg(arr: Array<String?>): Array<String?> {
+        return remArgs(arr, 1)
     }
 
-    public static String[] remFirstArg(String[] arr) {
-
-        return remArgs(arr, 1);
+    fun remLastArg(arr: Array<String?>): Array<String?> {
+        return subArray(arr, 0, arr.size - 1)
     }
 
-    public static String[] remLastArg(String[] arr) {
-
-        return subArray(arr, 0, arr.length - 1);
-    }
-
-    public static String[] remArgs(String[] arr, int startFromIndex) {
-
-        if (arr.length == 0)
-            return arr;
-        else if (arr.length < startFromIndex)
-            return new String[0];
-        else {
-            String[] newSplit = new String[arr.length - startFromIndex];
-            System.arraycopy(arr, startFromIndex, newSplit, 0, arr.length - startFromIndex);
-            return newSplit;
+    fun remArgs(arr: Array<String?>, startFromIndex: Int): Array<String?> {
+        return if (arr.size == 0) arr else if (arr.size < startFromIndex) arrayOfNulls(0) else {
+            val newSplit = arrayOfNulls<String>(arr.size - startFromIndex)
+            System.arraycopy(arr, startFromIndex, newSplit, 0, arr.size - startFromIndex)
+            newSplit
         }
     }
 
-    public static String[] subArray(String[] arr, int start, int end) {
+    fun subArray(arr: Array<String?>, start: Int, end: Int): Array<String?> {
 
         //assert start > end;
         //assert start >= 0;
         //assert end < args.length;
-        if (arr.length == 0)
-            return arr;
-        else if (end < start)
-            return new String[0];
-        else {
-            int length = end - start;
-            String[] newSplit = new String[length];
-            System.arraycopy(arr, start, newSplit, 0, length);
-            return newSplit;
+        return if (arr.size == 0) arr else if (end < start) arrayOfNulls(0) else {
+            val length = end - start
+            val newSplit = arrayOfNulls<String>(length)
+            System.arraycopy(arr, start, newSplit, 0, length)
+            newSplit
         }
     }
 
     /**
      * Shortens the string to fit in the specified size.
      *
-     * @param str - {@link String} to trim
+     * @param str - [String] to trim
      * @param length - length to trim to
      * @return the shortened string
      */
-    public static String trimMaxLength(String str, int length) {
-
-        if (str.length() < length)
-            return str;
-        else if (length > 3)
-            return str.substring(0, length);
-        else
-            throw new UnsupportedOperationException("Minimum length of 3 characters.");
+    fun trimMaxLength(str: String, length: Int): String {
+        return if (str.length < length) str else if (length > 3) str.substring(0, length) else throw UnsupportedOperationException("Minimum length of 3 characters.")
     }
 
     /**
      * Shortens the string to fit in the specified size with an ellipse "..." at
      * the end.
      *
-     * @param str - {@link String} to fit
+     * @param str - [String] to fit
      * @param length - Length of the string, before shortening
      * @return the shortened string, followed with ellipses
      */
-    public static String maxLength(String str, int length) {
-
-        if (str.length() < length)
-            return str;
-        else if (length > 3)
-            return str.substring(0, length - 3) + "...";
-        else
-            throw new UnsupportedOperationException("Minimum length of 3 characters.");
+    fun maxLength(str: String, length: Int): String {
+        return if (str.length < length) str else if (length > 3) str.substring(0, length - 3) + "..." else throw UnsupportedOperationException("Minimum length of 3 characters.")
     }
 
-    public static boolean containsIgnoreCase(List<String> arr, String str) {
-
-        for (String s : arr)
-            if (s.equalsIgnoreCase(str))
-                return true;
-        return false;
+    fun containsIgnoreCase(arr: List<String>, str: String?): Boolean {
+        for (s in arr) if (s.equals(str, ignoreCase = true)) return true
+        return false
     }
 
     /**
@@ -181,15 +128,12 @@ public class StringMgmt {
      * @param str - the string to change.
      * @return the string with spaces replacing underscores.
      */
-    public static String remUnderscore (String str) {
-        return str.replaceAll("_", " ");
+    fun remUnderscore(str: String): String {
+        return str.replace("_".toRegex(), " ")
     }
 
-    public static String capitalize(String str) {
-        if (str == null || str.isEmpty())
-            return str;
-
-        return str.substring(0, 1).toUpperCase() + str.substring(1);
+    fun capitalize(str: String?): String? {
+        return if (str == null || str.isEmpty()) str else str.substring(0, 1).uppercase(Locale.getDefault()) + str.substring(1)
     }
 
     /**
@@ -197,58 +141,42 @@ public class StringMgmt {
      * @param string String to capitalize.
      * @return String with the beginning letter of each word capitalized.
      */
-    public static String capitalizeStrings(String string) {
-        return Stream.of(string.split("_")).map(str -> str.substring(0, 1).toUpperCase() + str.substring(1)).collect(Collectors.joining("_"));
+    fun capitalizeStrings(string: String): String {
+        return Stream.of(*string.split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()).map { str: String -> str.substring(0, 1).uppercase(Locale.getDefault()) + str.substring(1) }.collect(Collectors.joining("_"))
     }
 
-    public static boolean parseOnOff(String s) throws Exception {
-
-        if (s.equalsIgnoreCase("on"))
-            return true;
-        else if (s.equalsIgnoreCase("off"))
-            return false;
-        else
-            throw new Exception("msg_err_invalid_input");
+    @Throws(Exception::class)
+    fun parseOnOff(s: String): Boolean {
+        return if (s.equals("on", ignoreCase = true)) true else if (s.equals("off", ignoreCase = true)) false else throw Exception("msg_err_invalid_input")
     }
 
-    public static boolean isAllUpperCase(@NotNull String string) {
-        if (string.isEmpty())
-            return false;
-
-        for (int i = 0; i < string.length(); i++) {
-            if (!Character.isUpperCase(string.charAt(i)))
-                return false;
+    fun isAllUpperCase(string: String): Boolean {
+        if (string.isEmpty()) return false
+        for (i in 0 until string.length) {
+            if (!Character.isUpperCase(string[i])) return false
         }
-        return true;
+        return true
     }
 
-    public static boolean isAllUpperCase(@NotNull Collection<String> collection) {
-        if (collection.isEmpty())
-            return false;
-
-        for (String string : collection)
-            if (!isAllUpperCase(string))
-                return false;
-
-        return true;
+    fun isAllUpperCase(collection: Collection<String>): Boolean {
+        if (collection.isEmpty()) return false
+        for (string in collection) if (!isAllUpperCase(string)) return false
+        return true
     }
 
-    public static List<String> addToList(List<String> list, String addition) {
-        List<String> out = new ArrayList<>(list);
-        out.add(addition);
-        return out;
+    fun addToList(list: List<String>?, addition: String): List<String> {
+        val out: MutableList<String> = ArrayList(list)
+        out.add(addition)
+        return out
     }
 
-    public static String wrap(String string, int wrapLength, String newlineString) {
-        int index = 0;
-        StringBuilder stringBuilder = new StringBuilder(string);
-
-        while (index + wrapLength < stringBuilder.length() && (index = stringBuilder.lastIndexOf(" ", index + wrapLength)) != -1) {
-            stringBuilder.replace(index, index + 1, newlineString);
-            index += newlineString.length();
+    fun wrap(string: String?, wrapLength: Int, newlineString: String): String {
+        var index = 0
+        val stringBuilder = StringBuilder(string)
+        while (index + wrapLength < stringBuilder.length && stringBuilder.lastIndexOf(" ", index + wrapLength).also { index = it } != -1) {
+            stringBuilder.replace(index, index + 1, newlineString)
+            index += newlineString.length
         }
-
-        return stringBuilder.toString();
+        return stringBuilder.toString()
     }
-
 }

@@ -1,73 +1,32 @@
-package com.poixpixelcustom.Object;
+package com.poixpixelcustom.Object
 
-import com.poixpixelcustom.Object.Metadata.CustomDataField;
-import com.google.common.base.Preconditions;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
+import com.google.common.base.Preconditions
+import com.poixpixelcustom.Object.Metadata.CustomDataField
+import org.jetbrains.annotations.Unmodifiable
+import java.util.*
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public abstract class PoixpixelCustomObject implements Nameable, Savable {
-
-    private String name;
-
-    private Map<String, CustomDataField<?>> metadata = null;
-
-    protected PoixpixelCustomObject(String name) {
-        this.name = name;
+abstract class PoixpixelCustomObject protected constructor(override var name: String) : Nameable, Savable {
+    private var metadata: MutableMap<String, CustomDataField<*>?>? = null
+    fun getTreeString(depth: Int): List<String> {
+        return ArrayList()
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public List<String> getTreeString(int depth) {
-
-        return new ArrayList<>();
-    }
-
-    public String getTreeDepth(int depth) {
-
-        char[] fill = new char[depth * 4];
-        Arrays.fill(fill, ' ');
+    fun getTreeDepth(depth: Int): String {
+        val fill = CharArray(depth * 4)
+        Arrays.fill(fill, ' ')
         if (depth > 0) {
-            fill[0] = '|';
-            int offset = (depth - 1) * 4;
-            fill[offset] = '+';
-            fill[offset + 1] = '-';
-            fill[offset + 2] = '-';
+            fill[0] = '|'
+            val offset = (depth - 1) * 4
+            fill[offset] = '+'
+            fill[offset + 1] = '-'
+            fill[offset + 2] = '-'
         }
-        return new String(fill);
+        return kotlin.String()
     }
 
-    @Override
-    public String toString() {
-        return getName();
+    override fun toString(): String {
+        return name
     }
-
-    /**
-     * Add a specific metadata to this PoixpixelCustomObject.
-     * Overrides existing metadata of the same key.
-     * Most implementations will save the object after this method is called.
-     *
-     * @param md CustomDataField to add.
-     */
-    public void addMetaData(@NotNull CustomDataField<?> md) {
-        this.addMetaData(md, false);
-    }
-
     /**
      * Add a specific metadata to this PoixpixelCustomObject.
      * Overrides existing metadata of the same key.
@@ -77,15 +36,19 @@ public abstract class PoixpixelCustomObject implements Nameable, Savable {
      */
     // Exists to maintain backwards compatibility
     // DO NOT OVERRIDE THIS METHOD ANYWHERE
-    public void addMetaData(@NotNull CustomDataField<?> md, boolean save) {
-        Preconditions.checkNotNull(md);
-        if (metadata == null)
-            metadata = new HashMap<>();
-
-        metadata.put(md.getKey(), md);
-
-        if (save)
-            this.save();
+    /**
+     * Add a specific metadata to this PoixpixelCustomObject.
+     * Overrides existing metadata of the same key.
+     * Most implementations will save the object after this method is called.
+     *
+     * @param md CustomDataField to add.
+     */
+    @JvmOverloads
+    fun addMetaData(md: CustomDataField<*>, save: Boolean = false) {
+        Preconditions.checkNotNull(md)
+        if (metadata == null) metadata = HashMap()
+        metadata!![md.key] = md
+        if (save) save()
     }
 
     /**
@@ -96,8 +59,8 @@ public abstract class PoixpixelCustomObject implements Nameable, Savable {
      *
      * @param md CustomDataField to remove.
      */
-    public void removeMetaData(@NotNull CustomDataField<?> md) {
-        this.removeMetaData(md, false);
+    fun removeMetaData(md: CustomDataField<*>) {
+        this.removeMetaData(md, false)
     }
 
     /**
@@ -112,22 +75,10 @@ public abstract class PoixpixelCustomObject implements Nameable, Savable {
      */
     // Exists to maintain backwards compatibility
     // DO NOT OVERRIDE THIS METHOD ANYWHERE
-    public boolean removeMetaData(@NotNull CustomDataField<?> md, boolean save) {
-        Preconditions.checkNotNull(md);
-        return removeMetaData(md.getKey(), save);
+    fun removeMetaData(md: CustomDataField<*>, save: Boolean): Boolean {
+        Preconditions.checkNotNull(md)
+        return removeMetaData(md.key, save)
     }
-
-    /**
-     * Remove a specific metadata from the PoixpixelCustomObject.
-     * Most implementations will save the PoixpixelCustomObject after removing the metadata.
-     *
-     * @param key Key of the data field to remove.
-     * @return whether the metadata was successfully removed.
-     */
-    public boolean removeMetaData(@NotNull String key) {
-        return removeMetaData(key, false);
-    }
-
     /**
      * Remove a specific metadata from the PoixpixelCustomObject.
      *
@@ -136,22 +87,23 @@ public abstract class PoixpixelCustomObject implements Nameable, Savable {
      *
      * @return whether the metadata was successfully removed.
      */
-    public boolean removeMetaData(@NotNull String key, boolean save) {
-        Preconditions.checkNotNull(key);
-
-        if (!hasMeta())
-            return false;
-
-        final boolean removed = metadata.remove(key) != null;
-
-        if (metadata.isEmpty())
-            this.metadata = null;
+    /**
+     * Remove a specific metadata from the PoixpixelCustomObject.
+     * Most implementations will save the PoixpixelCustomObject after removing the metadata.
+     *
+     * @param key Key of the data field to remove.
+     * @return whether the metadata was successfully removed.
+     */
+    @JvmOverloads
+    fun removeMetaData(key: String, save: Boolean = false): Boolean {
+        Preconditions.checkNotNull(key)
+        if (!hasMeta()) return false
+        val removed = metadata!!.remove(key) != null
+        if (metadata!!.isEmpty()) metadata = null
 
         // Only save if the element was actually removed
-        if (save && removed)
-            this.save();
-
-        return removed;
+        if (save && removed) save()
+        return removed
     }
 
     /**
@@ -162,12 +114,8 @@ public abstract class PoixpixelCustomObject implements Nameable, Savable {
      *
      * @return an unmodifiable collection of all metadata on the object.
      */
-    @Unmodifiable
-    public Collection<CustomDataField<?>> getMetadata() {
-        if (metadata == null || metadata.isEmpty())
-            return Collections.emptyList();
-
-        return Collections.unmodifiableCollection(metadata.values());
+    fun getMetadata(): Collection<CustomDataField<*>?>? {
+        return if (metadata == null || metadata!!.isEmpty()) emptyList<CustomDataField<*>>() else Collections.unmodifiableCollection(metadata!!.values)
     }
 
     /**
@@ -175,16 +123,11 @@ public abstract class PoixpixelCustomObject implements Nameable, Savable {
      *
      * @param key Key of the metadata to fetch.
      *
-     * @return the metadata associated with the key or {@code null} if none associated.
+     * @return the metadata associated with the key or `null` if none associated.
      */
-    @Nullable
-    public CustomDataField<?> getMetadata(@NotNull String key) {
-        Preconditions.checkNotNull(key);
-
-        if(metadata != null)
-            return metadata.get(key);
-
-        return null;
+    fun getMetadata(key: String): CustomDataField<*>? {
+        Preconditions.checkNotNull(key)
+        return if (metadata != null) metadata!![key] else null
     }
 
     /**
@@ -194,30 +137,26 @@ public abstract class PoixpixelCustomObject implements Nameable, Savable {
      * @param key Key of the metadata to fetch.
      * @param cdfClass Class of the CustomDataField to fetch.
      *
-     * @return the specific metadata associated with the key and class or {@code null} if none exist.
-     */
-    @SuppressWarnings("unchecked")
-    @Nullable
-    public <T extends CustomDataField<?>> T getMetadata(@NotNull String key, @NotNull Class<T> cdfClass) {
-        Preconditions.checkNotNull(cdfClass);
-        Preconditions.checkNotNull(key);
-
-        if(metadata != null) {
-            CustomDataField<?> cdf = metadata.get(key);
+     * @return the specific metadata associated with the key and class or `null` if none exist.
+    </T> */
+    fun <T : CustomDataField<*>?> getMetadata(key: String, cdfClass: Class<T>): T? {
+        Preconditions.checkNotNull(cdfClass)
+        Preconditions.checkNotNull(key)
+        if (metadata != null) {
+            val cdf = metadata!![key]
             if (cdfClass.isInstance(cdf)) {
-                return (T) cdf;
+                return cdf as T?
             }
         }
-
-        return null;
+        return null
     }
 
     /**
      *
      * @return whether this object has metadata or not.
      */
-    public boolean hasMeta() {
-        return metadata != null;
+    fun hasMeta(): Boolean {
+        return metadata != null
     }
 
     /**
@@ -226,12 +165,9 @@ public abstract class PoixpixelCustomObject implements Nameable, Savable {
      * @param key Key of the metadata to check.
      * @return whether metadata associated with the key exists.
      */
-    public boolean hasMeta(@NotNull String key) {
-        Preconditions.checkNotNull(key);
-        if (metadata != null)
-            return metadata.containsKey(key);
-
-        return false;
+    fun hasMeta(key: String): Boolean {
+        Preconditions.checkNotNull(key)
+        return if (metadata != null) metadata!!.containsKey(key) else false
     }
 
     /**
@@ -242,17 +178,14 @@ public abstract class PoixpixelCustomObject implements Nameable, Savable {
      * @param cdfClass Class extending CustomDataField to check.
      *
      * @return whether metadata associated with the key and class exists.
-     */
-    public <T extends CustomDataField<?>> boolean hasMeta(@NotNull String key, @NotNull Class<T> cdfClass) {
-        Preconditions.checkNotNull(cdfClass);
-        Preconditions.checkNotNull(key);
-
-        if(metadata != null) {
-            CustomDataField<?> cdf = metadata.get(key);
-            return cdfClass.isInstance(cdf);
+    </T> */
+    fun <T : CustomDataField<*>?> hasMeta(key: String, cdfClass: Class<T>): Boolean {
+        Preconditions.checkNotNull(cdfClass)
+        Preconditions.checkNotNull(key)
+        if (metadata != null) {
+            val cdf = metadata!![key]
+            return cdfClass.isInstance(cdf)
         }
-
-        return false;
+        return false
     }
-
 }

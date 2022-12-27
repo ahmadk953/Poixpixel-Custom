@@ -1,100 +1,67 @@
-package com.poixpixelcustom.util;
+package com.poixpixelcustom.util
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*
+import java.util.regex.Pattern
 
 /**
  * Represents a numbering system of a string format.
  */
-public class Version implements Comparable<Version> {
-
-    private final String version;
-    private static final Pattern SEPARATOR = Pattern.compile("\\.");
-    private static final Pattern VERSION_PATTERN = Pattern.compile("[0-9]+(" + SEPARATOR + "[0-9]+)*");
-    private final String[] components;
-
-    private Version(String version) {
-        this.version = version;
-        components = version.split(SEPARATOR.pattern());
-    }
-
-    /**
-     * Constructs a Version object from the given string.
-     *
-     * <p>This method will truncate any extraneous characters found
-     * after it matches the first qualified version string.</p>
-     *
-     * @param version A string that contains a formatted version.
-     * @return A new Version instance from the given string.
-     */
-    public static Version fromString(String version) {
-        if(version == null) {
-            throw new IllegalArgumentException("Version can not be null");
-        }
-
-        Matcher matcher = VERSION_PATTERN.matcher(version);
-        if(!matcher.find()) {
-            throw new IllegalArgumentException("Invalid version format: " + version);
-        }
-
-        return new Version(matcher.group(0));
-    }
-
-    @Override
-    public int compareTo(@NotNull Version that) {
-        int length = Math.max(components.length, that.components.length);
-
-        for(int i = 0; i < length; i++) {
-            int thisPart = i < components.length ? Integer.parseInt(components[i]) : 0;
-            int thatPart = i < that.components.length ? Integer.parseInt(that.components[i]) : 0;
-
-            if (thisPart < thatPart) {
-                return -1;
-            }
-
-            if (thisPart > thatPart) {
-                return 1;
-            }
-        }
-        return 0;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Version)) return false;
-        Version version1 = (Version) o;
-        return Objects.equals(version, version1.version);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(version);
-    }
-
-    @Override
-    public String toString() {
-        return version;
-    }
-
+class Version private constructor(private val version: String) : Comparable<Version?> {
     /**
      * Returns the components of the version separated by .'s
      *
      * @return A string array of the components.
      */
-    @NotNull
-    public String[] getComponents() {
-        return components;
+    val components: Array<String>
+
+    init {
+        components = version.split(SEPARATOR.pattern().toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
     }
 
-    public boolean isPreRelease() {
-        try {
-            return Integer.parseInt(this.components[components.length-1]) != 0;
-        } catch (NumberFormatException e) {
-            return false;
+    override fun compareTo(other: Version?): Int {
+        TODO("Not yet implemented")
+    }
+
+    override fun equals(o: Any?): Boolean {
+        if (this === o) return true
+        if (o !is Version) return false
+        return version == o.version
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(version)
+    }
+
+    override fun toString(): String {
+        return version
+    }
+
+    val isPreRelease: Boolean
+        get() = try {
+            components[components.size - 1].toInt() != 0
+        } catch (e: NumberFormatException) {
+            false
+        }
+
+    companion object {
+        private val SEPARATOR = Pattern.compile("\\.")
+        private val VERSION_PATTERN = Pattern.compile("[0-9]+(" + SEPARATOR + "[0-9]+)*")
+
+        /**
+         * Constructs a Version object from the given string.
+         *
+         *
+         * This method will truncate any extraneous characters found
+         * after it matches the first qualified version string.
+         *
+         * @param version A string that contains a formatted version.
+         * @return A new Version instance from the given string.
+         */
+        fun fromString(version: String?): Version {
+            requireNotNull(version) { "Version can not be null" }
+            val matcher = VERSION_PATTERN.matcher(version)
+            require(matcher.find()) { "Invalid version format: $version" }
+            return Version(matcher.group(0))
         }
     }
 }

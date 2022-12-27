@@ -1,50 +1,35 @@
-package com.poixpixelcustom.util;
+package com.poixpixelcustom.util
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import com.poixpixelcustom.Object.PoixpixelCustomObject;
-import com.poixpixelcustom.util.PoixpixelCustomComponents;
+import com.poixpixelcustom.Object.PoixpixelCustomObject
+import java.util.*
 
 /**
  * Useful function for use with the Minecraft Server chatbox.
  *
  */
-
-public class ChatTools {
-    private static final int DEFAULT_CHAT_WIDTH = 320;
-    private static final float SPACE_WIDTH = FontUtil.measureWidth(' ');
-    private static final float UNDERSCORE_WIDTH = FontUtil.measureWidth('_');
+object ChatTools {
+    private const val DEFAULT_CHAT_WIDTH = 320
+    private val SPACE_WIDTH = FontUtil.measureWidth(' ')
+    private val UNDERSCORE_WIDTH = FontUtil.measureWidth('_')
 
     // Padding used for the main title formatting
-    private static final String WIDGET = ".oOo.";
-    private static final float WIDGET_WIDTH = FontUtil.measureWidth(WIDGET);
+    private const val WIDGET = ".oOo."
+    private val WIDGET_WIDTH = FontUtil.measureWidth(WIDGET)
 
     // Padding used for subtitle formatting
-    private static final String SUBWIDGET = " .]|[. ";
-    private static final float SUBWIDGET_WIDTH = FontUtil.measureWidth(SUBWIDGET);
-
-    public static String listArr(String[] args, String prefix) {
-
-        return list(Arrays.asList(args), prefix);
+    private const val SUBWIDGET = " .]|[. "
+    private val SUBWIDGET_WIDTH = FontUtil.measureWidth(SUBWIDGET)
+    fun listArr(args: Array<String?>, prefix: String): String {
+        return list(Arrays.asList(*args), prefix)
     }
 
-    public static String list(Collection<String> args) {
-
-        return list(args, "");
+    @JvmOverloads
+    fun list(args: MutableList<String?>, prefix: String = ""): String {
+        return if (args.isEmpty()) "" else prefix + java.lang.String.join(", ", args)
     }
 
-    public static String list(Collection<String> args, String prefix) {
-        if (args.isEmpty())
-            return "";
-
-        return prefix + String.join(", ", args);
-    }
-
-    public static String stripColour(String s) {
-        return Colors.strip(s);
+    fun stripColour(s: String?): String? {
+        return Colors.strip(s)
     }
 
     /**
@@ -53,96 +38,76 @@ public class ChatTools {
      * @param object PoixpixelCustomObject
      * @return a title bar which won't exceed the allowed length.
      */
-    public static String formatTitle(PoixpixelCustomObject object) {
-
-        String title = object.getFormattedName();
-        if (title.length() > 51)
-            title = object.getName();
-        if (title.length() > 51)
-            title = title.substring(0, 51);
-
-        return formatTitle(title);
+    fun formatTitle(`object`: PoixpixelCustomObject): String {
+        var title = `object`.formattedName
+        if (title!!.length > 51) title = `object`.name
+        if (title!!.length > 51) title = title.substring(0, 51)
+        return formatTitle(title)
     }
 
-    public static String formatTitle(String title) {
-        title = ".[ " + "status_title_secondary_colour" + title + "status_title_primary_colour" + " ].";
-
-        if (!FontUtil.isValidMinecraftFont(title))
-            return legacyFormatTitle(title);
-
-        final float width = FontUtil.measureWidth(PoixpixelCustomComponents.miniMessage(title));
+    fun formatTitle(title: String?): String {
+        var title = title
+        title = ".[ " + "status_title_secondary_colour" + title + "status_title_primary_colour" + " ]."
+        if (!FontUtil.isValidMinecraftFont(title)) return legacyFormatTitle(title)
+        val width = FontUtil.measureWidth(PoixpixelCustomComponents.miniMessage(title))
 
         // Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.)
-        float remainder = DEFAULT_CHAT_WIDTH - (WIDGET_WIDTH * 2) - width - 2;
-        if (remainder < 1)
-            return "status_title_primary_colour" + title;
-        if (remainder < 14)
-            return "status_title_primary_colour" + WIDGET + title + WIDGET;
-
-        int times = (int) Math.floor(remainder / (UNDERSCORE_WIDTH * 2));
-        return "status_title_primary_colour" + WIDGET + repeatChar(times, "_") + title + repeatChar(times, "_") + WIDGET;
+        val remainder = DEFAULT_CHAT_WIDTH - WIDGET_WIDTH * 2 - width - 2
+        if (remainder < 1) return "status_title_primary_colour$title"
+        if (remainder < 14) return "status_title_primary_colour" + WIDGET + title + WIDGET
+        val times = Math.floor((remainder / (UNDERSCORE_WIDTH * 2)).toDouble()).toInt()
+        return "status_title_primary_colour" + WIDGET + repeatChar(times, "_") + title + repeatChar(times, "_") + WIDGET
     }
 
-
-    private static String legacyFormatTitle(String title) {
-        String line = ".oOo.__________________________________________________.oOo.";
-        if (title.length() > line.length())
-            title = title.substring(0, line.length());
-        int pivot = line.length() / 2;
-        String center = title;
-        String out = "status_title_primary_colour" + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
-        out += center + line.substring(pivot + center.length() / 2);
-        return out;
+    private fun legacyFormatTitle(title: String): String {
+        var title = title
+        val line = ".oOo.__________________________________________________.oOo."
+        if (title.length > line.length) title = title.substring(0, line.length)
+        val pivot = line.length / 2
+        val center = title
+        var out = "status_title_primary_colour" + line.substring(0, Math.max(0, pivot - center.length / 2))
+        out += center + line.substring(pivot + center.length / 2)
+        return out
     }
 
-    public static String formatSubTitle(String subtitle) {
-        if (!FontUtil.isValidMinecraftFont(subtitle))
-            return legacyFormatSubtitle(subtitle);
-
-        final float width = FontUtil.measureWidth(PoixpixelCustomComponents.miniMessage(subtitle));
+    fun formatSubTitle(subtitle: String): String {
+        if (!FontUtil.isValidMinecraftFont(subtitle)) return legacyFormatSubtitle(subtitle)
+        val width = FontUtil.measureWidth(PoixpixelCustomComponents.miniMessage(subtitle))
 
         // Max width - widgetx2 (already padded with an extra 1px) - title - 2 (1px before and after the title.)
-        float remainder = DEFAULT_CHAT_WIDTH - (SUBWIDGET_WIDTH * 2) - width - 2;
-        if (remainder < 1)
-            return "status_title_primary_colour" + subtitle;
-        if (remainder < 10)
-            return "status_title_primary_colour" + SUBWIDGET+ subtitle + "status_title_primary_colour" + SUBWIDGET;
-
-        int times = (int) Math.floor(remainder / (SPACE_WIDTH * 2));
-        return "status_title_primary_colour" + SUBWIDGET + repeatChar(times, " ") + subtitle + repeatChar(times, " ") + "status_title_primary_colour"  + SUBWIDGET;
+        val remainder = DEFAULT_CHAT_WIDTH - SUBWIDGET_WIDTH * 2 - width - 2
+        if (remainder < 1) return "status_title_primary_colour$subtitle"
+        if (remainder < 10) return "status_title_primary_colour" + SUBWIDGET + subtitle + "status_title_primary_colour" + SUBWIDGET
+        val times = Math.floor((remainder / (SPACE_WIDTH * 2)).toDouble()).toInt()
+        return "status_title_primary_colour" + SUBWIDGET + repeatChar(times, " ") + subtitle + repeatChar(times, " ") + "status_title_primary_colour" + SUBWIDGET
     }
 
-    private static String legacyFormatSubtitle(String subtitle) {
-        String line = " .]|[.                                                                     .]|[.";
-        int pivot = line.length() / 2;
-        String center = subtitle + "status_title_primary_colour";
-        String out = "status_title_primary_colour" + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
-        out += center + line.substring(pivot + center.length() / 2);
-        return out;
+    private fun legacyFormatSubtitle(subtitle: String): String {
+        val line = " .]|[.                                                                     .]|[."
+        val pivot = line.length / 2
+        val center = subtitle + "status_title_primary_colour"
+        var out = "status_title_primary_colour" + line.substring(0, Math.max(0, pivot - center.length / 2))
+        out += center + line.substring(pivot + center.length / 2)
+        return out
     }
 
-    private static String repeatChar(int num, String character) {
-        String output = "";
-        for (int i = 0; i < num; i++)
-            output += character;
-        return output;
+    private fun repeatChar(num: Int, character: String): String {
+        var output = ""
+        for (i in 0 until num) output += character
+        return output
     }
 
-    public static String formatCommand(String command, String subCommand, String help) {
-        return formatCommand("", command, subCommand, help);
+    fun formatCommand(command: String, subCommand: String, help: String): String {
+        return formatCommand("", command, subCommand, help)
     }
 
-    public static String formatCommand(String requirement, String command, String subCommand, String help) {
-
-        String out = "  ";
-        if (requirement.length() > 0)
-            out += Colors.Rose + requirement + ": ";
-        out += Colors.Blue + command;
-        if (subCommand.length() > 0)
-            out += " " + Colors.LightBlue + subCommand;
-        if (help.length() > 0)
-            out += " " + Colors.LightGray + " : " + help;
-        return out;
+    fun formatCommand(requirement: String, command: String, subCommand: String, help: String): String {
+        var out = "  "
+        if (requirement.length > 0) out += Colors.Rose + requirement + ": "
+        out += Colors.Blue + command
+        if (subCommand.length > 0) out += " " + Colors.LightBlue + subCommand
+        if (help.length > 0) out += " " + Colors.LightGray + " : " + help
+        return out
     }
 
     /**
@@ -153,12 +118,12 @@ public class ChatTools {
      * @return - Fully formatted output which should be sent to the player.
      * @author - Articdive
      */
-    public static String[] formatList(String title, String subject, List<String> list, String page) {
-        List<String> output = new ArrayList<>();
-        output.add(0, formatTitle(title));
-        output.add(1, subject);
-        output.addAll(list);
-        output.add(page);
-        return output.toArray(new String[0]);
+    fun formatList(title: String?, subject: String, list: List<String>?, page: String): Array<String> {
+        val output: MutableList<String> = ArrayList()
+        output.add(0, formatTitle(title))
+        output.add(1, subject)
+        output.addAll(list!!)
+        output.add(page)
+        return output.toTypedArray()
     }
 }
