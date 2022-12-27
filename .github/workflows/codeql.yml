@@ -32,6 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        java: ['17']
         language: [ 'java' ]
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Use only 'java' to analyze code written in Java, Kotlin or both
@@ -66,9 +67,23 @@ jobs:
     #   If the Autobuild fails above, remove it and uncomment the following three lines.
     #   modify them (or add more) to build your code if your project, please refer to the EXAMPLE below for guidance.
 
-    - run: |
-       echo "Run, Build Application using script"
-       ./setupandbuild.sh
+    #- run: |
+       #echo "Run, Build Application using script"
+       #./setupandbuild.sh
+
+
+    - name: Set up Eclipse Temurin
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: ${{ matrix.java }}
+        java-package: jdk
+        cache: 'maven'
+    - name: Compile with Maven
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: mvn clean package
+
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
