@@ -20,8 +20,6 @@ import java.util.logging.Logger
 
 class PoixpixelCustom : JavaPlugin() {
     val version = description.version
-    private val errors: List<PoixpixelCustom> = ArrayList()
-    private val essentials: Essentials? = null
     var isCitizens2 = false
     private var pluginsFound = 0
 
