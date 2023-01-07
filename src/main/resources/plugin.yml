@@ -4,21 +4,14 @@ main: com.poixpixelcustom.PoixpixelCustom
 api-version: 1.19
 authors: [ ahmadk953 ]
 description: A custom plugin made for Poixpixel
-depend: [ Vault ]
-softdepend: [ Essentials ]
+softdepend: [ Essentials, Vault ]
 commands:
   enrich:
     description: Makes you rich!
     usage: /<command>
     aliases: [ rich ]
-  test-economy:
-    discription: Gives you $1.05 when ran
-    usage: /<command>
-    aliases: [ money giveMoney ]
-  test-permission:
-    discription: Tests to see if you have the poixpixelcustom.awesome permission
-    usage: /<command>
-    aliases: [ amICool, coolOrNot ]
+  bits:
+    description: Shows your balance
 permissions:
   poixpixelcustom.enrich:
     description: Gives access to use the enrich command
@@ -26,7 +19,3 @@ permissions:
   poixpixelcustom.*:
     description: All commands
     default: op
-  poixpixelcustom.awesome:
-    discription: Awesome or not?
-    default: op
-
