@@ -7,10 +7,13 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
         strategy:
             matrix:
                 java: ['17']
-        name: Java (Temurin) ${{ matrix.java }}
+        name: Java (Temurin) ${{ matrix.java }} Build and Deploy
         steps:
             - uses: actions/checkout@v3
             - name: Set up Eclipse Temurin
@@ -23,8 +26,8 @@ jobs:
             - name: Compile with Maven
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: mvn clean package
-            - name: Publish to GitHub Packages Apache Maven
+              run: mvn -B package --file pom.xml
+            - name: Publish to GitHub Package
               run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
               env:
                   GITHUB_TOKEN: ${{ github.token }}
