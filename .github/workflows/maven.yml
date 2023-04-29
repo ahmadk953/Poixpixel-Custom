@@ -7,9 +7,6 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
-        permissions:
-            contents: read
-            packages: write
         strategy:
             matrix:
                 java: ['17']
@@ -23,14 +20,8 @@ jobs:
                   java-version: ${{ matrix.java }}
                   java-package: jdk
                   cache: 'maven'
-                  server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-                  settings-path: ${{ github.workspace }} # location for the settings.xml file
             - name: Compile with Maven
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: mvn -B package --file pom.xml
-            - name: Publish to GitHub Package
-              run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
-              env:
-                  GITHUB_TOKEN: ${{ github.token }}
+              run: mvn clean package
 
