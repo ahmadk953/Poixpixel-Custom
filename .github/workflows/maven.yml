@@ -25,6 +25,7 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: mvn clean package
     deploy:
+        needs: build
         runs-on: ubuntu-latest
         steps:
             - name: Publish to GitHub Packages Apache Maven
