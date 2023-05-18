@@ -4,7 +4,7 @@ main: com.poixpixelcustom.PoixpixelCustom
 api-version: 1.19
 authors: [ ahmadk953 ]
 description: A custom plugin made for Poixpixel
-softdepend: [ Essentials, Vault ]
+softdepend: [ Essentials, Vault, LuckPerms ]
 commands:
   enrich:
     description: Makes you rich!

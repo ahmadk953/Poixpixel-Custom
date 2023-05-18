@@ -1,16 +1,16 @@
 package com.poixpixelcustom;
 
-import com.poixpixelcustom.commands.BalanceCommand;
 import com.poixpixelcustom.commands.EnrichCommand;
-import com.poixpixelcustom.commands.TestPermissionCommand;
 import com.poixpixelcustom.listeners.BreakBlockListener;
-import com.poixpixelcustom.util.*;
+import com.poixpixelcustom.listeners.RewardListener;
+import com.poixpixelcustom.util.BukkitTools;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,10 +24,10 @@ public class PoixpixelCustom extends JavaPlugin {
 
     private static final Logger log = Logger.getLogger("Minecraft");
     private static PoixpixelCustom plugin;
-    private static Economy economy = null;
+    public static Economy economy;
     private static BukkitAudiences adventure;
     private int pluginsFound = 0;
-    private int pluginId = 17328;
+    private final PluginManager pluginManager = getServer().getPluginManager();
 
     public static void setPlugin(PoixpixelCustom plugin) {
         PoixpixelCustom.plugin = plugin;
@@ -46,7 +46,7 @@ public class PoixpixelCustom extends JavaPlugin {
         } catch (Exception e) {
             log.severe("Error loading plugin. Plugin was loaded with 1 or more errors. Disabling plugin.");
             log.severe("Errors:" + e);
-            //this.getServer().getPluginManager().disablePlugin(this);
+            this.getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
@@ -57,9 +57,9 @@ public class PoixpixelCustom extends JavaPlugin {
     public void onDisable() {
 
         if (adventure != null) {
-            adventure.close();
             adventure = null;
         }
+        log.info("Goodbye!");
 
     }
 
@@ -73,38 +73,33 @@ public class PoixpixelCustom extends JavaPlugin {
     private void registerCommands() {
         Objects.requireNonNull(this.getCommand("enrich")).setExecutor(new EnrichCommand());
         getLogger().info("Added the Enrich command.");
-        Objects.requireNonNull(this.getCommand("test-economy")).setExecutor(new BalanceCommand());
-        getLogger().info("Added the Basic-Economy command.");
-        Objects.requireNonNull(this.getCommand("test-permission")).setExecutor(new TestPermissionCommand());
-        getLogger().info("Added the Test-Permission command.");
     }
 
     private void registerListeners() {
         Bukkit.getPluginManager().registerEvents(new BreakBlockListener(), this);
+        pluginManager.registerEvents(new RewardListener((PoixpixelCustom) economy), this);
     }
 
     public void loadFoundation() {
-        if (!setupEconomy()) {
+        if (setupEconomy() == null) {
             log.warning(String.format("[%s] - No Vault dependency found! Plugin might run with limited functionality.", getDescription().getName()));
             return;
         }
         registerListeners();
     }
 
-    private boolean setupEconomy()
-    {
-        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
-            economy = economyProvider.getProvider();
+    private Economy setupEconomy() {
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            getLogger().severe("Unable to find an economy plugin!");
+            return economy = null;
         }
-
-        return (economy != null);
+        return economy = rsp.getProvider();
     }
 
     public static Economy getEconomy() {
         return economy;
     }
-
 
 
     private void checkPlugins() {
@@ -137,6 +132,7 @@ public class PoixpixelCustom extends JavaPlugin {
         /*
          * Register bStats Metrics
          */
+        int pluginId = 17328;
         Metrics metrics = new Metrics(this, pluginId);
 
         metrics.addCustomChart(new SimplePie("server_type", () -> {
@@ -146,5 +142,9 @@ public class PoixpixelCustom extends JavaPlugin {
                 return "Other";
         }));
 
+    }
+
+    public Object getDataManager() {
+        return null;
     }
 }
