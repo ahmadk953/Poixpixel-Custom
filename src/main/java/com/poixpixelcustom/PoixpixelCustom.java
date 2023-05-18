@@ -56,9 +56,7 @@ public class PoixpixelCustom extends JavaPlugin {
 
     public void onDisable() {
 
-        if (adventure != null) {
-            adventure = null;
-        }
+        adventure = null;
         log.info("Goodbye!");
 
     }
@@ -94,7 +92,8 @@ public class PoixpixelCustom extends JavaPlugin {
             getLogger().severe("Unable to find an economy plugin!");
             return economy = null;
         }
-        return economy = rsp.getProvider();
+        economy = rsp.getProvider();
+        return economy;
     }
 
     public static Economy getEconomy() {
@@ -142,9 +141,5 @@ public class PoixpixelCustom extends JavaPlugin {
                 return "Other";
         }));
 
-    }
-
-    public Object getDataManager() {
-        return null;
     }
 }
