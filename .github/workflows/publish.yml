@@ -18,7 +18,7 @@ jobs:
                   java-package: jdk
                   settings-path: ${{ github.workspace }} # location for the settings.xml file
             - name: Setup JFrog CLI
-              uses: jfrog/setup-jfrog-cli@v2
+              uses: jfrog/setup-jfrog-cli@v3
               env:
                 JF_ENV_1: ${{ secrets.JF_SECRET_ENV_1 }}
             - name: Build
