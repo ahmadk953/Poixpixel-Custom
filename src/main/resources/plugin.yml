@@ -1,21 +1,6 @@
 name: PoixpixelCustom
-version: '${project.version}'
-main: com.poixpixelcustom.PoixpixelCustom
-api-version: 1.19
-authors: [ ahmadk953 ]
-description: A custom plugin made for Poixpixel
-softdepend: [ Essentials, Vault, LuckPerms ]
-commands:
-  enrich:
-    description: Makes you rich!
-    usage: /<command>
-    aliases: [ rich ]
-  bits:
-    description: Shows your balance
-permissions:
-  poixpixelcustom.enrich:
-    description: Gives access to use the enrich command
-    default: op
-  poixpixelcustom.*:
-    description: All commands
-    default: op
+version: 2.0.0-SNAPSHOT
+main: com.poixpixelcustom
+description: A Custom Plugin for Poixpixel
+author: ahmadk953
+api-version: '1.20'

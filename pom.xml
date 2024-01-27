@@ -6,7 +6,7 @@
 
     <groupId>com</groupId>
     <artifactId>PoixpixelCustom</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <licenses>
@@ -17,182 +17,55 @@
         </license>
     </licenses>
 
-    <name>com.poixpixelcustom.PoixpixelCustom1</name>
+    <name>com.poixpixelcustom.PoixpixelCustom</name>
 
     <description>A custom plugin made for Poixpixel</description>
     <properties>
-        <java.version>17</java.version>
-        <maven.version>3.8.1</maven.version>
-        <main.class>com.example.test.PoixpixelCustom</main.class>
+        <java.version>21</java.version>
+        <maven.version>3.9.6</maven.version>
+        <main.class>com.poixpixelcustom</main.class>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <distributionManagement>
         <repository>
-            <id>poixpixelcustom-central</id>
-            <name>a0bp5iyvlonml-artifactory-primary-0-releases</name>
-            <url>https://ahmadk953.jfrog.io/artifactory/poixpixelcustom/releases/</url>
+            <id>central</id>
+            <name>a0soyy1oad2ty-artifactory-primary-0-releases</name>
+            <url>https://poixpixelorg.jfrog.io/artifactory/poixpixel-custom-libs-release</url>
         </repository>
         <snapshotRepository>
-            <id>poixpixelcustom-snapshots</id>
-            <name>a0bp5iyvlonml-artifactory-primary-0-snapshots</name>
-            <url>https://ahmadk953.jfrog.io/artifactory/poixpixelcustom//snapshots/</url>
+            <id>snapshots</id>
+            <name>a0soyy1oad2ty-artifactory-primary-0-snapshots</name>
+            <url>https://poixpixelorg.jfrog.io/artifactory/poixpixel-custom-libs-snapshot</url>
         </snapshotRepository>
     </distributionManagement>
 
     <build>
-        <sourceDirectory>src/main/java</sourceDirectory>
-        <defaultGoal>clean package</defaultGoal>
         <plugins>
-            <plugin>  <!-- Create sources.jar -->
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.1</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.12.1</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>${main.class}</mainClass>
-                        </manifest>
-                    </archive>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
-                <!-- <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.1</version>
-                <configuration>
-                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml
-                    </dependencyReducedPomLocation>
-                    <artifactSet>
-                        <includes>
-                            <include>net.kyori:adventure-platform-bukkit</include>
-                            <include>net.kyori:adventure-platform-api</include>
-                            <include>net.kyori:adventure-api</include>
-                            <include>net.kyori:adventure-text-serializer-craftbukkit</include>
-                            <include>net.kyori:adventure-platform-facet</include>
-                            <include>net.kyori:adventure-text-serializer-gson</include>
-                            <include>net.kyori:adventure-text-serializer-legacy</include>
-                            <include>net.kyori:adventure-key</include>
-                            <include>net.kyori:adventure-text-serializer-gson-legacy-impl</include>
-                            <include>net.kyori:adventure-text-serializer-bungeecord</include>
-                            <include>net.kyori:adventure-platform-viaversion</include>
-                            <include>net.kyori:adventure-nbt</include>
-                            <include>net.kyori:examination-api</include>
-                            <include>net.kyori:examination-string</include>
-                            <include>net.kyori:adventure-text-serializer-plain</include>
-                            <include>net.kyori:adventure-text-minimessage</include>
-                            <include>com.zaxxer:HikariCP</include>
-                            <include>io.papermc:paperlib</include>
-                            <include>org.apache.commons:commons-compress</include>
-                            <include>org.apache.commons:commons-text</include>
-                            <include>org.bstats:bstats-bukkit</include>
-                            <include>org.bstats:bstats-base</include>
-                            <include>org.json:json</include>
-                            <include>solar.squares:pixel-width-core</include>
-                        </includes>
-                    </artifactSet>
-                    <relocations>
-                        <relocation>
-                            <pattern>io.papermc.lib</pattern>
-                            <shadedPattern>com.poixpixelcustom.paperlib</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.zaxxer.hikari</pattern>
-                            <shadedPattern>com.poixpixelcustom.hikaricp</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.apache.commons.compress</pattern>
-                            <shadedPattern>com.poixpixelcustom.compress</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.apache.commons.text</pattern>
-                            <shadedPattern>com.poixpixelcustom.text</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>net.kyori.adventure</pattern>
-                            <shadedPattern>com.poixpixelcustom.adventure</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>net.kyori.examination</pattern>
-                            <shadedPattern>com.poixpixelcustom.examination</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.bstats</pattern>
-                            <shadedPattern>com.poixpixelcustom.metrics</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>solar.squares.pixelwidth</pattern>
-                            <shadedPattern>com.poixpixelcustom.libs.pixelwidth</shadedPattern>
-                        </relocation>
-                    </relocations>
-                    <filters>
-                        <filter>
-                            <artifact>*:*</artifact>
-                            <excludes>
-                                <exclude>META-INF/*.MF</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <artifact>net.kyori:*</artifact>
-                            <excludes>META-INF/versions/9/module-info.class</excludes>
-                        </filter>
-                    </filters>
-                    <minimizeJar>true</minimizeJar>
-                </configuration>
+                <version>3.5.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
-                <executions>
-                    <execution>
-                        <id>default-compile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <execution>
-                        <id>default-testCompile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <execution>
-                        <id>java-compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>java-test-compile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <release>8</release>
-                    <source>16</source>
-                    <target>16</target>
-                    <compilerArgs>
-                        <arg>-Xplugin:jabel</arg>
-                    </compilerArgs>
-                </configuration>
             </plugin>
         </plugins>
         <resources>
@@ -209,130 +82,44 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>papermc</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
-        </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-        <repository>
-            <id>tne-repo</id>
-            <url>https://repo.codemc.io/repository/maven-public/</url>
-        </repository>
-        <repository>
-            <id>ess-repo</id>
-            <url>https://repo.essentialsx.net/releases/</url>
-        </repository>
-        <repository>
-            <id>citizens-repo</id>
-            <url>https://repo.citizensnpcs.co/</url>
-        </repository>
-        <repository>
-            <id>placeholderapi</id>
-            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-        <repository>
             <id>sonatype-oss-snapshots</id>
             <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2</url>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
         <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
         </repository>
     </repositories>
 
     <dependencies>
         <dependency>
+            <groupId>io.papermc</groupId>
+            <artifactId>paperlib</artifactId>
+            <version>1.0.8</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.19.2-R0.1-SNAPSHOT</version>
+            <version>1.20.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.19.2-R0.1-SNAPSHOT</version>
+            <version>1.20.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.willfp</groupId>
-            <artifactId>eco</artifactId>
-            <version>6.48.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.papermc</groupId>
-            <artifactId>paperlib</artifactId>
-            <version>1.0.7</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>5.1.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.tnemc</groupId>
-            <artifactId>Reserve</artifactId>
-            <version>0.1.5.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.tnemc</groupId>
-            <artifactId>TheNewChat</artifactId>
-            <version>1.5.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.MilkBowl</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.7.1</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>net.ess3</groupId>
-            <artifactId>EssentialsX</artifactId>
-            <version>2.18.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.ElgarL</groupId>
-            <artifactId>groupmanager</artifactId>
-            <version>2.9</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.citizensnpcs</groupId>
-            <artifactId>citizensapi</artifactId>
-            <version>2.0.28-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- Included in vanilla minecraft's JAR -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.22.1</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>me.clip</groupId>
-            <artifactId>placeholderapi</artifactId>
-            <version>2.11.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
@@ -348,44 +135,6 @@
             <artifactId>annotations</artifactId>
             <version>23.1.0</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.3.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bstats</groupId>
-            <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.luckperms</groupId>
-            <artifactId>api</artifactId>
-            <version>5.4</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.bsideup.jabel</groupId>
-            <artifactId>jabel-javac-plugin</artifactId>
-            <version>1.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>4.15.0</version>
-        </dependency>
-        <dependency>
-            <groupId>solar.squares</groupId>
-            <artifactId>pixel-width-core</artifactId>
-            <version>1.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.15.0</version>
         </dependency>
     </dependencies>
 </project>
