@@ -13,12 +13,12 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ "master" ]
+    branches: ["master"]
   schedule:
-    - cron: '43 9 * * 2'
+    - cron: "43 9 * * 2"
 
 jobs:
   analyze:
@@ -32,8 +32,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: ['17']
-        language: [ 'java' ]
+        java: ["21"]
+        language: ["java"]
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Use only 'java' to analyze code written in Java, Kotlin or both
         # Use only 'javascript' to analyze code written in JavaScript, TypeScript or both
@@ -55,7 +55,6 @@ jobs:
           # Details on CodeQL's query packs refer to : https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
           # queries: security-extended,security-and-quality
 
-
           # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
           # If this step fails, then you should remove it and run the build manually (see below)
           #- name: Autobuild
@@ -71,19 +70,17 @@ jobs:
           #echo "Run, Build Application using script"
           #./setupandbuild.sh
 
-
       - name: Set up Eclipse Temurin
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: "temurin"
           java-version: ${{ matrix.java }}
           java-package: jdk
-          cache: 'maven'
+          cache: "maven"
       - name: Compile with Maven
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: mvn clean package
-
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3

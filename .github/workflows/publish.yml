@@ -1,33 +1,32 @@
 name: Published Release / PreRelease
 
 on:
-    release:
-        types: [released]
-        branches: [master]
-    workflow_dispatch:
+  release:
+    types: [released]
+  workflow_dispatch:
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - name: Set up Eclipse Temurin
-              uses: actions/setup-java@v4
-              with:
-                  distribution: 'temurin'
-                  java-version: '17'
-                  java-package: jdk
-                  settings-path: ${{ github.workspace }} # location for the settings.xml file
-            - name: Setup JFrog CLI
-              uses: jfrog/setup-jfrog-cli@v3
-              env:
-                JF_ENV_1: ${{ secrets.JF_SECRET_ENV_1 }}
-            - name: Build
-              run: mvn -B package
-            - name: Deploy
-              run: |
-                # Collect environment variables for the build
-                jf rt bce
-                # Collect VCS details from git and add them to the build
-                jf rt bag
-                # Publish build info
-                jf rt bp
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Eclipse Temurin
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+          java-package: jdk
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v3
+        env:
+          JF_ENV_1: ${{ secrets.JF_SECRET_ENV_1 }}
+      - name: Build
+        run: mvn -B package
+      - name: Deploy
+        run: |
+          # Collect environment variables for the build
+          jf rt bce
+          # Collect VCS details from git and add them to the build
+          jf rt bag
+          # Publish build info
+          jf rt bp
