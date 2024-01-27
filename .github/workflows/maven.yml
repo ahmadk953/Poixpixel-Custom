@@ -1,27 +1,26 @@
 name: Maven Compile
 on:
-    push:
-        branches: [master]
-    pull_request:
-        branches: [master]
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                java: ['17']
-        name: Java (Temurin) ${{ matrix.java }} Build and Deploy
-        steps:
-            - uses: actions/checkout@v3
-            - name: Set up Eclipse Temurin
-              uses: actions/setup-java@v3
-              with:
-                  distribution: 'temurin'
-                  java-version: ${{ matrix.java }}
-                  java-package: jdk
-                  cache: 'maven'
-            - name: Compile with Maven
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: mvn clean package
-
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: ["21"]
+    name: Java (Temurin) ${{ matrix.java }} Build and Deploy
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Eclipse Temurin
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: ${{ matrix.java }}
+          java-package: jdk
+          cache: "maven"
+      - name: Compile with Maven
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: mvn clean package
