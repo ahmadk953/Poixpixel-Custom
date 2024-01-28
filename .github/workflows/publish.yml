@@ -1,4 +1,4 @@
-name: Deploy Java Package to JFrog Artifactory
+name: Build and Deploy
 
 on:
   release:
@@ -21,6 +21,7 @@ jobs:
       
       - name: Create Maven settings.xml
         run: |
+          mkdir -p $HOME/.m2
           touch $HOME/.m2/settings.xml
           echo "${{ secrets.MAVEN_SETTINGS }}" > $HOME/.m2/settings.xml
       
