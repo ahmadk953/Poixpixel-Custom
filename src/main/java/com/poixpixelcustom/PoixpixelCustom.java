@@ -1,18 +1,24 @@
 package com.poixpixelcustom;
 
+import org.bstats.bukkit.Metrics;
+
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+
+import java.util.logging.Logger;
 
 public class PoixpixelCustom extends JavaPlugin {
 
+    private static final Logger log = Logger.getLogger("Minecraft");
+
     @Override
     public void onEnable() {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Hello, World!");
+        Metrics metrics = new Metrics(this, 20841);
+
+        log.info("Enabled Poixpixel Custom");
     }
 
     @Override
     public void onDisable() {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Goodbye, World!");
+        log.info("Goodbye");
     }
 }
