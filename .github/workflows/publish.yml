@@ -21,6 +21,7 @@ jobs:
       
       - name: Create Maven settings.xml
         run: |
+          touch $HOME/.m2/settings.xml
           echo "${{ secrets.MAVEN_SETTINGS }}" > $HOME/.m2/settings.xml
       
       - name: Build with Maven
