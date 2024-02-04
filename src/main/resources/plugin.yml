@@ -5,6 +5,9 @@ description: A Custom Plugin for Poixpixel
 author: ahmadk953
 api-version: '1.20'
 
+# Dependencies
+depend: [Vault]
+
 # Bstats
 bStats:
   enabled: true

@@ -113,5 +113,6 @@ buildNumber.properties
 run/
 
 # Misc
-.vscode
+.vscode/
 settings.xml
+test-server/
