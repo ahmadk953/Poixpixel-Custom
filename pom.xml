@@ -29,13 +29,13 @@
     <distributionManagement>
         <repository>
             <id>central</id>
-            <name>a0soyy1oad2ty-artifactory-primary-0-releases</name>
-            <url>https://poixpixelorg.jfrog.io/artifactory/poixpixel-custom-libs-release</url>
+            <name>release</name>
+            <url>http://localhost:8081/repository/poixpixelcustom-release</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
-            <name>a0soyy1oad2ty-artifactory-primary-0-snapshots</name>
-            <url>https://poixpixelorg.jfrog.io/artifactory/poixpixel-custom-libs-snapshot</url>
+            <name>snapshot</name>
+            <url>http://localhost:8081/repository/poixpixelcustom-snapshot</url>
         </snapshotRepository>
     </distributionManagement>
 
