@@ -28,14 +28,14 @@
 
     <distributionManagement>
         <repository>
-            <id>central</id>
+            <id>nexus</id>
             <name>release</name>
-            <url>http://localhost:8081/repository/poixpixelcustom-release</url>
+            <url>http://192.168.1.184:8081/repository/poixpixelcustom-release</url>
         </repository>
         <snapshotRepository>
-            <id>snapshots</id>
+            <id>nexus</id>
             <name>snapshot</name>
-            <url>http://localhost:8081/repository/poixpixelcustom-snapshot</url>
+            <url>http://192.168.1.184:8081/repository/poixpixelcustom-snapshot</url>
         </snapshotRepository>
     </distributionManagement>
 
