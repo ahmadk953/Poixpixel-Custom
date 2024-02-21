@@ -8,6 +8,22 @@ api-version: '1.20'
 # Dependencies
 depend: [Vault]
 
+# Commands
+commands:
+  explodingentity:
+    description: "Spawn an explosive cow"
+    usage: "/explodingentity [set/baby] [entity]"
+    aliases: [ explosiveentity ]
+    permission: poixpixelcustom.command.explodingentity
+    permission-message: "You don't have permission to spawn an explosive cow"
+
+# Permissions
+permissions:
+  poixpixelcustom.command.explodingentity:
+    default: true
+  poixpixelcustom.explodingentity.use:
+    default: true
+
 # Bstats
 bStats:
   enabled: true
