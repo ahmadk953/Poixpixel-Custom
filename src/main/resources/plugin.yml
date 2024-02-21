@@ -16,6 +16,10 @@ commands:
     aliases: [ explosiveentity ]
     permission: poixpixelcustom.command.explodingentity
     permission-message: "You don't have permission to spawn an explosive cow"
+  butterfly:
+    description: "Toggle Butterfly particle effect"
+    usage: "/butterfly"
+    permission: poixpixelcustom.command.butterfly
 
 # Permissions
 permissions:

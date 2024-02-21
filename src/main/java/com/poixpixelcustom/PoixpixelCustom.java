@@ -1,8 +1,10 @@
 package com.poixpixelcustom;
 
+import com.poixpixelcustom.commands.ButterflyCommand;
 import com.poixpixelcustom.commands.ExplodingEntityCommand;
 import com.poixpixelcustom.listeners.EntityListener;
 
+import com.poixpixelcustom.tasks.ButterflyTask;
 import com.poixpixelcustom.utils.ConfigHandler;
 import org.bstats.bukkit.Metrics;
 import net.milkbowl.vault.chat.Chat;
@@ -11,15 +13,17 @@ import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.logging.Logger;
 
 public class PoixpixelCustom extends JavaPlugin {
-    public Economy econ = null;
+    private Economy econ = null;
     private static Permission perms = null;
     private static Chat chat = null;
 
     private static final Logger log = Logger.getLogger("Minecraft");
+    private BukkitTask task;
 
     /**
      * Called when the plugin is enabled
@@ -39,7 +43,13 @@ public class PoixpixelCustom extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        log.info(String.format("[%s] - Goodbye", this.getName()));
+        try {
+            disablePlugin();
+            log.info(String.format("[%s] - Plugin Disabled", this.getName()));
+        } catch (Exception e) {
+            handleException(e);
+            log.severe(String.format("[%s] - Plugin Disabled With Errors", this.getName()));
+        }
     }
 
     /**
@@ -68,11 +78,23 @@ public class PoixpixelCustom extends JavaPlugin {
          * Register Commands
          */
         getCommand("explodingentity").setExecutor(new ExplodingEntityCommand());
+        getCommand("butterfly").setExecutor(new ButterflyCommand());
 
         /*
          * Load Config
          */
         ConfigHandler.getInstance().load();
+
+        /*
+         * Start Tasks
+         */
+        task = getServer().getScheduler().runTaskTimer(this, ButterflyTask.getInstance(), 0, 1);
+    }
+
+    private void disablePlugin() {
+        if (task != null && !task.isCancelled()) {
+            task.cancel();
+        }
     }
 
     /**
