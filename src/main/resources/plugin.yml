@@ -20,6 +20,11 @@ commands:
     description: "Toggle Butterfly particle effect"
     usage: "/butterfly"
     permission: poixpixelcustom.command.butterfly
+  displayentity:
+    aliases: [ de ]
+    description: "Spawns a display entity"
+    usage: "/displayentity [item/block/text] [block/item]"
+    permission: poixpixelcustom.command.displayentity
 
 # Permissions
 permissions:

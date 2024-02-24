@@ -1,6 +1,7 @@
 package com.poixpixelcustom;
 
 import com.poixpixelcustom.commands.ButterflyCommand;
+import com.poixpixelcustom.commands.DisplayEntityCommand;
 import com.poixpixelcustom.commands.ExplodingEntityCommand;
 import com.poixpixelcustom.listeners.EntityListener;
 
@@ -79,6 +80,7 @@ public class PoixpixelCustom extends JavaPlugin {
          */
         getCommand("explodingentity").setExecutor(new ExplodingEntityCommand());
         getCommand("butterfly").setExecutor(new ButterflyCommand());
+        getCommand("displayentity").setExecutor(new DisplayEntityCommand());
 
         /*
          * Load Config
@@ -101,7 +103,6 @@ public class PoixpixelCustom extends JavaPlugin {
      * Handle an exception by logging the error and disabling the plugin.
      *
      * @param e the exception to be handled
-     * @return void
      */
     private void handleException(Exception e) {
         log.severe(String.format("[%s] - There was an Error in the Plugin: %s", this.getName(), e.getMessage()));

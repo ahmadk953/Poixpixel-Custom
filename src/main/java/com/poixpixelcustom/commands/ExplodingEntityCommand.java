@@ -42,13 +42,11 @@ public class ExplodingEntityCommand implements CommandExecutor, TabExecutor {
 
                 if (!type.isSpawnable() || !type.isAlive()) {
                     sender.sendMessage("You can only use living and spawnable entities!");
-
                     return true;
                 }
 
                 ConfigHandler.getInstance().setExplodingType(type);
                 sender.sendMessage("Exploding type set to " + type);
-
                 return true;
             }
             return false;
