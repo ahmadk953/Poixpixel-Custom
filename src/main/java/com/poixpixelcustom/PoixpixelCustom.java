@@ -1,14 +1,13 @@
 package com.poixpixelcustom;
 
-import com.poixpixelcustom.commands.ButterflyCommand;
-import com.poixpixelcustom.commands.CustomItemCommand;
-import com.poixpixelcustom.commands.DisplayEntityCommand;
-import com.poixpixelcustom.commands.ExplodingEntityCommand;
+import com.poixpixelcustom.commands.*;
 import com.poixpixelcustom.listeners.EntityListener;
+import com.poixpixelcustom.listeners.GuiListener;
 import com.poixpixelcustom.tasks.ButterflyTask;
 import com.poixpixelcustom.utils.ConfigHandler;
 
 import org.bstats.bukkit.Metrics;
+
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -75,6 +74,7 @@ public class PoixpixelCustom extends JavaPlugin {
          * Register Listeners
          */
         getServer().getPluginManager().registerEvents(new EntityListener(), this);
+        getServer().getPluginManager().registerEvents(new GuiListener(), this);
 
         /*
          * Register Commands
@@ -83,6 +83,7 @@ public class PoixpixelCustom extends JavaPlugin {
         getCommand("butterfly").setExecutor(new ButterflyCommand());
         getCommand("displayentity").setExecutor(new DisplayEntityCommand());
         getCommand("customitem").setExecutor(new CustomItemCommand());
+        getCommand("gui").setExecutor(new GuiCommand());
 
         /*
          * Load Config

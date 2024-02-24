@@ -11,7 +11,7 @@ depend: [Vault]
 # Commands
 commands:
   explodingentity:
-    description: "Spawn an explosive cow"
+    description: "Spawn an explosive entity"
     usage: "/explodingentity [set/baby] [entity]"
     aliases: [ explosiveentity ]
     permission: poixpixelcustom.command.explodingentity
@@ -29,6 +29,10 @@ commands:
     description: "Gives you a custom item"
     usage: "/customitem"
     permission: poixpixelcustom.command.customitem
+  gui:
+    description: "Opens a Custom GUI"
+    usage: "/gui"
+    permission: poixpixelcustom.command.gui
 
 # Permissions
 permissions:
