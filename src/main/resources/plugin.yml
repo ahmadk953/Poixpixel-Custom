@@ -25,6 +25,10 @@ commands:
     description: "Spawns a display entity"
     usage: "/displayentity [item/block/text] [block/item]"
     permission: poixpixelcustom.command.displayentity
+  customitem:
+    description: "Gives you a custom item"
+    usage: "/customitem"
+    permission: poixpixelcustom.command.customitem
 
 # Permissions
 permissions:

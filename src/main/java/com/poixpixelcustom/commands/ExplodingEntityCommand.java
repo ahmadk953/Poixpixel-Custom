@@ -1,7 +1,6 @@
 package com.poixpixelcustom.commands;
 
-import com.poixpixelcustom.PoixpixelCustom;
-
+import com.poixpixelcustom.constants.Keys;
 import com.poixpixelcustom.utils.ConfigHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -9,7 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.*;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -65,7 +64,7 @@ public class ExplodingEntityCommand implements CommandExecutor, TabExecutor {
             }
         }
 
-        entity.setMetadata("PoixpixelCustom", new FixedMetadataValue(PoixpixelCustom.getInstance(), true));
+        entity.getPersistentDataContainer().set(Keys.CUSTOM_ENTITY, PersistentDataType.BOOLEAN, true);
         entity.setCustomName(ChatColor.RED + "Milk Me");
         entity.setCustomNameVisible(true);
 

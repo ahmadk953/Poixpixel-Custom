@@ -1,12 +1,13 @@
 package com.poixpixelcustom;
 
 import com.poixpixelcustom.commands.ButterflyCommand;
+import com.poixpixelcustom.commands.CustomItemCommand;
 import com.poixpixelcustom.commands.DisplayEntityCommand;
 import com.poixpixelcustom.commands.ExplodingEntityCommand;
 import com.poixpixelcustom.listeners.EntityListener;
-
 import com.poixpixelcustom.tasks.ButterflyTask;
 import com.poixpixelcustom.utils.ConfigHandler;
+
 import org.bstats.bukkit.Metrics;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -81,6 +82,7 @@ public class PoixpixelCustom extends JavaPlugin {
         getCommand("explodingentity").setExecutor(new ExplodingEntityCommand());
         getCommand("butterfly").setExecutor(new ButterflyCommand());
         getCommand("displayentity").setExecutor(new DisplayEntityCommand());
+        getCommand("customitem").setExecutor(new CustomItemCommand());
 
         /*
          * Load Config
