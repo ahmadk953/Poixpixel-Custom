@@ -40,6 +40,8 @@ permissions:
     default: true
   poixpixelcustom.explodingentity.use:
     default: true
+  poixpixelcustom.laser.use:
+    default: false
 
 # Bstats
 bStats:

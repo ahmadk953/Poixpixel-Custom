@@ -3,8 +3,10 @@ package com.poixpixelcustom;
 import com.poixpixelcustom.commands.*;
 import com.poixpixelcustom.listeners.EntityListener;
 import com.poixpixelcustom.listeners.GuiListener;
+import com.poixpixelcustom.listeners.LaserPointerListener;
 import com.poixpixelcustom.tasks.Board;
 import com.poixpixelcustom.tasks.ButterflyTask;
+import com.poixpixelcustom.tasks.LaserPointerTask;
 import com.poixpixelcustom.utils.ConfigHandler;
 import com.poixpixelcustom.utils.CustomRecipes;
 
@@ -26,8 +28,10 @@ public class PoixpixelCustom extends JavaPlugin {
     private static Chat chat = null;
 
     private static final Logger log = Logger.getLogger("Minecraft");
+
     private BukkitTask butterflyTask;
     private BukkitTask scoreboardTask;
+    private BukkitTask laserPointerTask;
 
     /**
      * Called when the plugin is enabled
@@ -78,6 +82,7 @@ public class PoixpixelCustom extends JavaPlugin {
          */
         getServer().getPluginManager().registerEvents(new EntityListener(), this);
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
+        getServer().getPluginManager().registerEvents(new LaserPointerListener(), this);
 
         /*
          * Register Commands
@@ -100,6 +105,7 @@ public class PoixpixelCustom extends JavaPlugin {
          */
         butterflyTask = getServer().getScheduler().runTaskTimer(this, ButterflyTask.getInstance(), 0, 1);
         scoreboardTask = getServer().getScheduler().runTaskTimer(this, Board.getInstance(), 0, 20);
+        laserPointerTask = getServer().getScheduler().runTaskTimer(this, LaserPointerTask.getInstance(), 0, 1);
 
         /*
         * Register Custom Recipes
@@ -116,6 +122,9 @@ public class PoixpixelCustom extends JavaPlugin {
         }
         if (scoreboardTask != null && !scoreboardTask.isCancelled()) {
             scoreboardTask.cancel();
+        }
+        if (laserPointerTask != null && !laserPointerTask.isCancelled()) {
+            laserPointerTask.cancel();
         }
     }
 
