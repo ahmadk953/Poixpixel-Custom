@@ -6,6 +6,7 @@ import com.poixpixelcustom.listeners.GuiListener;
 import com.poixpixelcustom.tasks.Board;
 import com.poixpixelcustom.tasks.ButterflyTask;
 import com.poixpixelcustom.utils.ConfigHandler;
+import com.poixpixelcustom.utils.CustomRecipes;
 
 import org.bstats.bukkit.Metrics;
 
@@ -99,6 +100,11 @@ public class PoixpixelCustom extends JavaPlugin {
          */
         butterflyTask = getServer().getScheduler().runTaskTimer(this, ButterflyTask.getInstance(), 0, 1);
         scoreboardTask = getServer().getScheduler().runTaskTimer(this, Board.getInstance(), 0, 20);
+
+        /*
+        * Register Custom Recipes
+         */
+        CustomRecipes.register();
     }
 
     private void disablePlugin() {

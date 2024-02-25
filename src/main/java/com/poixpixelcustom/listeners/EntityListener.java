@@ -33,7 +33,7 @@ public class EntityListener implements Listener {
                     && handItemContainer.has(Keys.CUSTOM_BUCKET)) {
 
                 if (!player.hasPermission("poixpixelcustom.explodingentity.use")) {
-                    player.sendMessage("You don't have permission to milk this entity!");
+                    player.sendMessage("You don't have permission to left click this entity!");
 
                     return;
                 }

@@ -65,7 +65,7 @@ public class ExplodingEntityCommand implements CommandExecutor, TabExecutor {
         }
 
         entity.getPersistentDataContainer().set(Keys.CUSTOM_ENTITY, PersistentDataType.BOOLEAN, true);
-        entity.setCustomName(ChatColor.RED + "Milk Me");
+        entity.setCustomName(ChatColor.RED + "Click Me");
         entity.setCustomNameVisible(true);
 
         return true;
