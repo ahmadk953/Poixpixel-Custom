@@ -14,6 +14,7 @@ public class ConfigHandler {
     private YamlConfiguration config;
 
     private EntityType explodingType;
+    private float explosionPower;
 
     private ConfigHandler() {};
 
@@ -32,6 +33,7 @@ public class ConfigHandler {
         }
 
         explodingType = EntityType.valueOf(config.getString("Explosion.Entity_Type"));
+        explosionPower = (float) config.getDouble("Explosion.Explosion_Power");
     }
 
     public void save() {
@@ -52,6 +54,11 @@ public class ConfigHandler {
         return explodingType;
     }
 
+    public float getExplosionPower() {
+        if (explosionPower <= 0F) return 2.5F;
+        return explosionPower;
+    }
+
     public void setExplodingType(EntityType explodingType) {
         this.explodingType = explodingType;
 
@@ -60,5 +67,9 @@ public class ConfigHandler {
 
     public static ConfigHandler getInstance() {
         return instance;
+    }
+
+    public YamlConfiguration getConfig() {
+        return config;
     }
 }

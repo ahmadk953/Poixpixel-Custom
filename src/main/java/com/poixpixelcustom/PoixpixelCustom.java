@@ -89,6 +89,8 @@ public class PoixpixelCustom extends JavaPlugin {
          * Load Config
          */
         ConfigHandler.getInstance().load();
+        log.info("CONFIG: " + String.valueOf(ConfigHandler.getInstance().getConfig()));
+        log.info("Explosion Power: " + String.valueOf(ConfigHandler.getInstance().getExplosionPower()));
 
         /*
          * Start Tasks
@@ -152,6 +154,11 @@ public class PoixpixelCustom extends JavaPlugin {
     }
 
 
+    /**
+     * Retrieves an instance of PoixpixelCustom.
+     *
+     * @return an instance of PoixpixelCustom
+     */
     public static PoixpixelCustom getInstance() {
         return getPlugin(PoixpixelCustom.class);
     }

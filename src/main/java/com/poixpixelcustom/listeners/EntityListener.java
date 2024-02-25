@@ -13,6 +13,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 
 public class EntityListener implements Listener {
 
+    private final float explotionPower = ConfigHandler.getInstance().getExplosionPower();
+
     @EventHandler
     public void onEntityRightClick(PlayerInteractEntityEvent event) {
 
@@ -36,7 +38,8 @@ public class EntityListener implements Listener {
                     return;
                 }
 
-                entity.getWorld().createExplosion(entity.getLocation(), 2.5F);
+                player.sendMessage(String.valueOf(explotionPower));
+                entity.getWorld().createExplosion(entity.getLocation(), explotionPower);
             }
         }
     }

@@ -1,4 +1,6 @@
 # Exploding Animal Settings
 Explosion:
   # The Entity That Explodes
-  Entity_Type: BAT
+  Entity_Type: COW
+  # The Explosion Power
+  Explosion_Power: 2.5
