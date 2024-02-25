@@ -3,6 +3,7 @@ package com.poixpixelcustom;
 import com.poixpixelcustom.commands.*;
 import com.poixpixelcustom.listeners.EntityListener;
 import com.poixpixelcustom.listeners.GuiListener;
+import com.poixpixelcustom.tasks.Board;
 import com.poixpixelcustom.tasks.ButterflyTask;
 import com.poixpixelcustom.utils.ConfigHandler;
 
@@ -24,7 +25,8 @@ public class PoixpixelCustom extends JavaPlugin {
     private static Chat chat = null;
 
     private static final Logger log = Logger.getLogger("Minecraft");
-    private BukkitTask task;
+    private BukkitTask butterflyTask;
+    private BukkitTask scoreboardTask;
 
     /**
      * Called when the plugin is enabled
@@ -33,7 +35,7 @@ public class PoixpixelCustom extends JavaPlugin {
     public void onEnable() {
         try {
             setup();
-            log.info(String.format("[%s] - Enabled Poixpixel Custom", this.getName()));
+            log.info(String.format("[%s] Enabled Poixpixel Custom", this.getName()));
         } catch (Exception e) {
             handleException(e);
         }
@@ -46,10 +48,10 @@ public class PoixpixelCustom extends JavaPlugin {
     public void onDisable() {
         try {
             disablePlugin();
-            log.info(String.format("[%s] - Plugin Disabled", this.getName()));
+            log.info(String.format("[%s] Plugin Disabled", this.getName()));
         } catch (Exception e) {
             handleException(e);
-            log.severe(String.format("[%s] - Plugin Disabled With Errors", this.getName()));
+            log.severe(String.format("[%s] Plugin Disabled With Errors", this.getName()));
         }
     }
 
@@ -95,12 +97,19 @@ public class PoixpixelCustom extends JavaPlugin {
         /*
          * Start Tasks
          */
-        task = getServer().getScheduler().runTaskTimer(this, ButterflyTask.getInstance(), 0, 1);
+        butterflyTask = getServer().getScheduler().runTaskTimer(this, ButterflyTask.getInstance(), 0, 1);
+        scoreboardTask = getServer().getScheduler().runTaskTimer(this, Board.getInstance(), 0, 20);
     }
 
     private void disablePlugin() {
-        if (task != null && !task.isCancelled()) {
-            task.cancel();
+        /*
+         * Cancel Tasks if they are Running
+         */
+        if (butterflyTask != null && !butterflyTask.isCancelled()) {
+            butterflyTask.cancel();
+        }
+        if (scoreboardTask != null && !scoreboardTask.isCancelled()) {
+            scoreboardTask.cancel();
         }
     }
 
@@ -110,7 +119,7 @@ public class PoixpixelCustom extends JavaPlugin {
      * @param e the exception to be handled
      */
     private void handleException(Exception e) {
-        log.severe(String.format("[%s] - There was an Error in the Plugin: %s", this.getName(), e.getMessage()));
+        log.severe(String.format("[%s] There was an Error in the Plugin: %s", this.getName(), e.getMessage()));
         getServer().getPluginManager().disablePlugin(this);
     }
 
