@@ -2,6 +2,10 @@ package com.poixpixelcustom.tasks;
 
 import com.poixpixelcustom.PoixpixelCustom;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
@@ -33,22 +37,21 @@ public class Board implements Runnable {
         Objective objective = scoreboard.registerNewObjective(PoixpixelCustom.getInstance().getName(), "dummy");
 
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + PoixpixelCustom.getInstance().getName());
+        objective.displayName(Component.text(PoixpixelCustom.getInstance().getName()).color(NamedTextColor.DARK_PURPLE).decorate(TextDecoration.BOLD));
 
-        objective.getScore(ChatColor.LIGHT_PURPLE + " ").setScore(6);
-        objective.getScore(ChatColor.WHITE + "This is a test scoreboard").setScore(5);
-        objective.getScore(ChatColor.DARK_RED + " ").setScore(4);
-        objective.getScore(ChatColor.AQUA + " ").setScore(2);
-        objective.getScore(ChatColor.GREEN + "Plugin by ahmadk953 for Poixpixel").setScore(1);
-        objective.getScore(ChatColor.RED + "Plugin Version: " + PoixpixelCustom.getInstance().getDescription().getVersion()).setScore(0);
+        objective.getScore(ChatColor.LIGHT_PURPLE + " ").setScore(5);
+        objective.getScore(ChatColor.WHITE + "This is a test scoreboard").setScore(4);
+        objective.getScore(ChatColor.DARK_RED + " ").setScore(3);
+        objective.getScore(ChatColor.AQUA + " ").setScore(1);
+        objective.getScore(ChatColor.GREEN + "Plugin by ahmadk953 for Poixpixel").setScore(0);
 
         Team team = scoreboard.registerNewTeam("walk_distance");
         String teamKey = ChatColor.GOLD.toString();
         team.addEntry(teamKey);
-        team.setPrefix("Walked: ");
-        team.setSuffix("0cm");
+        team.prefix(Component.text("Walked: "));
+        team.suffix(Component.text("0cm"));
 
-        objective.getScore(teamKey).setScore(3);
+        objective.getScore(teamKey).setScore(2);
         player.setScoreboard(scoreboard);
     }
 
@@ -56,7 +59,7 @@ public class Board implements Runnable {
         Scoreboard scoreboard = player.getScoreboard();
         Team team = scoreboard.getTeam("walk_distance");
 
-        team.setSuffix(ChatColor.YELLOW + "" + (player.getStatistic(Statistic.WALK_ONE_CM) + player.getStatistic(Statistic.SPRINT_ONE_CM)) + "cm");
+        team.suffix(Component.text((player.getStatistic(Statistic.WALK_ONE_CM) + player.getStatistic(Statistic.SPRINT_ONE_CM)) + "cm").color(NamedTextColor.YELLOW));
     }
 
     public static Board getInstance() {

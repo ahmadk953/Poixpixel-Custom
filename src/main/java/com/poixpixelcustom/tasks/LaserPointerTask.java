@@ -1,5 +1,8 @@
 package com.poixpixelcustom.tasks;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -20,14 +23,14 @@ public final class LaserPointerTask implements Runnable {
         for (Player online : Bukkit.getOnlinePlayers()) {
             ItemStack hand = online.getItemInHand();
 
-            if (hand.hasItemMeta() && hand.getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Laser Pointer")) {
+            if (hand.hasItemMeta() && hand.getItemMeta().displayName().equals(Component.text("Laser Pointer").color(NamedTextColor.WHITE))) {
                 Location location = online.getLocation().add(0, 1, 0);
 
                 for (double waypoint = 1; waypoint < length; waypoint += particleDistance) {
                     Vector vector = location.getDirection().multiply(waypoint);
                     location.add(vector);
 
-                    if (location.getBlock().getType() != Material.AIR)
+                    if (location.getBlock().getType() != Material.AIR && location.getBlock().getType() != Material.WATER)
                         break;
 
                     location.getWorld().spawnParticle(Particle.REDSTONE, location, 1, new Particle.DustOptions(Color.YELLOW, 0.75F));

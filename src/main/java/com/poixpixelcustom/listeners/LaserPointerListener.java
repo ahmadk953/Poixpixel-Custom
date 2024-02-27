@@ -1,5 +1,7 @@
 package com.poixpixelcustom.listeners;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +25,11 @@ public final class LaserPointerListener implements Listener {
         int distance = 100;
 
         if (!player.hasPermission("poixpixelcustom.laser.use")) {
-            player.sendMessage(ChatColor.LIGHT_PURPLE + "[Laser]" + ChatColor.WHITE + " You do not have permission to use the laser!");
+            player.sendMessage(Component
+                    .text("[Laser] ")
+                    .color(NamedTextColor.LIGHT_PURPLE)
+                    .append(Component.text("You do not have permission to use the laser!").color(NamedTextColor.WHITE))
+            );
             return;
         }
 
@@ -33,7 +39,11 @@ public final class LaserPointerListener implements Listener {
             if (result != null && result.getHitBlock() != null && result.getHitBlock().isSolid())
                 player.getWorld().createExplosion(result.getHitBlock().getLocation(), 5F, true);
             else
-                player.sendMessage(ChatColor.LIGHT_PURPLE + "[Laser]" + ChatColor.WHITE + " Target is too far or not a solid block!");
+                player.sendMessage(Component
+                        .text("[Laser] ")
+                        .color(NamedTextColor.LIGHT_PURPLE)
+                        .append(Component.text("Target is too far or not a solid block!").color(NamedTextColor.WHITE))
+                );
         }
     }
 }

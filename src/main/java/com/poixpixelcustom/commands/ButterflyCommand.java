@@ -2,6 +2,7 @@ package com.poixpixelcustom.commands;
 
 import com.poixpixelcustom.tasks.ButterflyTask;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,11 +24,11 @@ public class ButterflyCommand implements CommandExecutor {
 
         if (instance.hasPlayer(player.getUniqueId())) {
             instance.removePlayer(player.getUniqueId());
-            player.sendMessage("You no longer have butterfly wings!");
+            player.sendMessage(Component.text("You no longer have butterfly wings!"));
 
         } else {
             instance.addPlayer(player.getUniqueId());
-            player.sendMessage("You now have butterfly wings!");
+            player.sendMessage(Component.text("You now have butterfly wings!"));
         }
 
         return true;

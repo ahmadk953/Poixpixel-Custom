@@ -30,12 +30,12 @@
         <repository>
             <id>nexus</id>
             <name>release</name>
-            <url>http://192.168.1.111:8081/repository/poixpixelcustom-release</url>
+            <url>http://192.168.1.125:8081/repository/poixpixelcustom-release</url>
         </repository>
         <snapshotRepository>
             <id>nexus</id>
             <name>snapshot</name>
-            <url>http://192.168.1.111:8081/repository/poixpixelcustom-snapshot</url>
+            <url>http://192.168.1.125:8081/repository/poixpixelcustom-snapshot</url>
         </snapshotRepository>
     </distributionManagement>
 

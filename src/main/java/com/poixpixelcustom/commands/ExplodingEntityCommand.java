@@ -2,6 +2,9 @@ package com.poixpixelcustom.commands;
 
 import com.poixpixelcustom.constants.Keys;
 import com.poixpixelcustom.utils.ConfigHandler;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -65,7 +68,7 @@ public class ExplodingEntityCommand implements CommandExecutor, TabExecutor {
         }
 
         entity.getPersistentDataContainer().set(Keys.CUSTOM_ENTITY, PersistentDataType.BOOLEAN, true);
-        entity.setCustomName(ChatColor.RED + "Click Me");
+        entity.customName(Component.text("Click Me").color(NamedTextColor.RED));
         entity.setCustomNameVisible(true);
 
         return true;

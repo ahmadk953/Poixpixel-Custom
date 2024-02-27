@@ -1,8 +1,10 @@
 package com.poixpixelcustom.commands;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -80,7 +82,7 @@ public class DisplayEntityCommand implements CommandExecutor, TabExecutor {
             // 3: Text
             if (args[0].equalsIgnoreCase("text")) {
                 TextDisplay text = player.getWorld().spawn(player.getLocation(), TextDisplay.class);
-                text.setText(ChatColor.BOLD + "Hello World! \n" + ChatColor.GREEN + "This is a test!");
+                text.text(Component.text("Hello World! \n This is a test!").color(NamedTextColor.GREEN).decorate(TextDecoration.BOLD));
 
                 // text.setBackgroundColor(Color.RED);
                 text.setLineWidth(50);

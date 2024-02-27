@@ -2,7 +2,10 @@ package com.poixpixelcustom.commands;
 
 import com.poixpixelcustom.constants.Keys;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,12 +35,13 @@ public class CustomItemCommand implements CommandExecutor {
         ItemStack customBucket = new ItemStack(Material.BUCKET);
         ItemMeta meta = customBucket.getItemMeta();
 
-        meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Secret Bucket");
-        meta.setLore(Arrays.asList(
-                "",
-                ChatColor.GRAY + "Right click me on a entity!",
-                "",
-                ChatColor.RED + "" + ChatColor.ITALIC + "Just don't left click me on an entity..."));
+        meta.displayName(Component.text("Secret Bucket").color(NamedTextColor.GOLD).decorate(TextDecoration.BOLD));
+        meta.lore(Arrays.asList(
+                Component.text(""),
+                Component.text("Right click me on a entity!").color(NamedTextColor.GRAY),
+                Component.text(""),
+                Component.text("Just don't left click me on an entity...").color(NamedTextColor.RED).decorate(TextDecoration.ITALIC)
+        ));
 
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         meta.addEnchant(Enchantment.KNOCKBACK, 255, true);

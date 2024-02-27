@@ -1,6 +1,7 @@
 package com.poixpixelcustom;
 
 import com.poixpixelcustom.commands.*;
+import com.poixpixelcustom.listeners.ChatListener;
 import com.poixpixelcustom.listeners.EntityListener;
 import com.poixpixelcustom.listeners.GuiListener;
 import com.poixpixelcustom.listeners.LaserPointerListener;
@@ -83,6 +84,7 @@ public class PoixpixelCustom extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EntityListener(), this);
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
         getServer().getPluginManager().registerEvents(new LaserPointerListener(), this);
+        getServer().getPluginManager().registerEvents(new ChatListener(), this);
 
         /*
          * Register Commands

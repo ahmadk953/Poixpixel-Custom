@@ -55,6 +55,9 @@ public class ConfigHandler {
     }
 
     public float getExplosionPower() {
+        // Temporarily print explosion power for debugging purposes
+        // FIXME: Figure out why this does not work
+        System.out.println(explosionPower);
         if (explosionPower <= 0F) return 2.5F;
         return explosionPower;
     }

@@ -2,13 +2,16 @@ package com.poixpixelcustom.commands;
 
 import com.poixpixelcustom.PoixpixelCustom;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -28,21 +31,21 @@ public class GuiCommand implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        Inventory inventory = Bukkit.createInventory(player, 9 * 3, ChatColor.DARK_BLUE + "Utility Menu");
+        Inventory inventory = Bukkit.createInventory(player, InventoryType.CHEST, Component.text("Utility Menu").color(NamedTextColor.DARK_PURPLE));
 
         ItemStack getDiamondButton = new ItemStack(Material.DIAMOND);
         ItemMeta diamondMeta = getDiamondButton.getItemMeta();
-        diamondMeta.setDisplayName(ChatColor.AQUA + "Get Diamond");
+        diamondMeta.displayName(Component.text("Get Diamond").color(NamedTextColor.AQUA));
         getDiamondButton.setItemMeta(diamondMeta);
 
         ItemStack clearInventoryButton = new ItemStack(Material.LAVA_BUCKET);
         ItemMeta clearInventoryMeta = clearInventoryButton.getItemMeta();
-        clearInventoryMeta.setDisplayName(ChatColor.RED + "Clear Inventory");
+        clearInventoryMeta.displayName(Component.text("Clear Inventory").color(NamedTextColor.RED));
         clearInventoryButton.setItemMeta(clearInventoryMeta);
 
         ItemStack clearWeatherButton = new ItemStack(Material.SUNFLOWER);
         ItemMeta clearWeatherMeta = clearWeatherButton.getItemMeta();
-        clearWeatherMeta.setDisplayName(ChatColor.YELLOW + "Clear Weather");
+        clearWeatherMeta.displayName(Component.text("Clear Weather").color(NamedTextColor.YELLOW));
         clearWeatherButton.setItemMeta(clearWeatherMeta);
 
         inventory.setItem(11, getDiamondButton);
