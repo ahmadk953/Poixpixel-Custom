@@ -6,6 +6,8 @@ import org.bukkit.entity.EntityType;
 
 import java.io.File;
 
+import static com.poixpixelcustom.utils.ExceptionHandeler.handleException;
+
 public class ConfigHandler {
 
     private final static ConfigHandler instance = new ConfigHandler();
@@ -29,7 +31,7 @@ public class ConfigHandler {
         try {
             config.load(file);
         } catch (Exception e) {
-            e.printStackTrace();
+            handleException(e, false);
         }
 
         explodingType = EntityType.valueOf(config.getString("Explosion.Entity_Type"));
@@ -40,7 +42,7 @@ public class ConfigHandler {
         try {
             config.save(file);
         } catch (Exception e) {
-            e.printStackTrace();
+            handleException(e, false);
         }
     }
 

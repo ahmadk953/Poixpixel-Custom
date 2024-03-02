@@ -23,6 +23,8 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.logging.Logger;
 
+import static com.poixpixelcustom.utils.ExceptionHandeler.handleException;
+
 public class PoixpixelCustom extends JavaPlugin {
     private Economy econ = null;
     private static Permission perms = null;
@@ -43,7 +45,7 @@ public class PoixpixelCustom extends JavaPlugin {
             setup();
             log.info(String.format("[%s] Enabled Poixpixel Custom", this.getName()));
         } catch (Exception e) {
-            handleException(e);
+            handleException(e, true);
         }
     }
 
@@ -56,7 +58,7 @@ public class PoixpixelCustom extends JavaPlugin {
             disablePlugin();
             log.info(String.format("[%s] Plugin Disabled", this.getName()));
         } catch (Exception e) {
-            handleException(e);
+            handleException(e, false);
             log.severe(String.format("[%s] Plugin Disabled With Errors", this.getName()));
         }
     }
@@ -128,16 +130,6 @@ public class PoixpixelCustom extends JavaPlugin {
         if (laserPointerTask != null && !laserPointerTask.isCancelled()) {
             laserPointerTask.cancel();
         }
-    }
-
-    /**
-     * Handle an exception by logging the error and disabling the plugin.
-     *
-     * @param e the exception to be handled
-     */
-    private void handleException(Exception e) {
-        log.severe(String.format("[%s] There was an Error in the Plugin: %s", this.getName(), e.getMessage()));
-        getServer().getPluginManager().disablePlugin(this);
     }
 
     /**
