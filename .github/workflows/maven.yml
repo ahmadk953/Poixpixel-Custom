@@ -1,16 +1,16 @@
 name: Maven Compile
 on:
   push:
-    branches: [master]
+    branches: [ master ]
   pull_request:
-    branches: [master]
+    branches: [ master ]
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: ["21"]
-    name: Java (Temurin) ${{ matrix.java }} Build and Deploy
+        java: [ "21" ]
+    name: Java (Temurin) ${{ matrix.java }} Build and Analyze
     steps:
       - uses: actions/checkout@v4
       - name: Set up Eclipse Temurin
@@ -19,8 +19,20 @@ jobs:
           distribution: "temurin"
           java-version: ${{ matrix.java }}
           java-package: jdk
-          cache: "maven"
-      - name: Compile with Maven
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn clean package
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ahmadk953_Poixpixel-Custom
