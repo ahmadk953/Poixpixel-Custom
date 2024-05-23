@@ -32,12 +32,12 @@
         <repository>
             <id>nexus</id>
             <name>release</name>
-            <url>http://192.168.1.84:8081/repository/poixpixelcustom-release</url>
+            <url>http://192.168.1.48:8081/repository/poixpixelcustom-release</url>
         </repository>
         <snapshotRepository>
             <id>nexus</id>
             <name>snapshot</name>
-            <url>http://192.168.1.84:8081/repository/poixpixelcustom-snapshot</url>
+            <url>http://192.168.1.48:8081/repository/poixpixelcustom-snapshot</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -112,7 +112,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.20.4-R0.1-SNAPSHOT</version>
+            <version>1.20.6-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -124,7 +124,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.20.4-R0.1-SNAPSHOT</version>
+            <version>1.20.6-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

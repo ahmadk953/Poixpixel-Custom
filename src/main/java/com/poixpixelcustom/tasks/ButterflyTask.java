@@ -53,7 +53,7 @@ public class ButterflyTask implements Runnable {
             rotateAroundAxisY(particleLocation, location.getYaw());
 
             DustOptions dust = new DustOptions(Color.fromRGB(212, 146, 53), 0.6F);
-            player.getWorld().spawnParticle(Particle.REDSTONE, location.clone().add(particleLocation), 0, dust);
+            player.getWorld().spawnParticle(Particle.DUST, location.clone().add(particleLocation), 0, dust);
         }
     }
 

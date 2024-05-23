@@ -20,7 +20,7 @@ public final class CustomRecipes {
         ItemStack superPaper = new ItemStack(org.bukkit.Material.PAPER);
         ItemMeta superPaperMeta = superPaper.getItemMeta();
         superPaperMeta.displayName(Component.text("Super Paper").color(NamedTextColor.GOLD));
-        superPaperMeta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+        superPaperMeta.addEnchant(Enchantment.FIRE_PROTECTION, 1, true);
         superPaperMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         superPaper.setItemMeta(superPaperMeta);
 
