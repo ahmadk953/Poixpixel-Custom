@@ -23,7 +23,7 @@ public final class LaserPointerTask implements Runnable {
         double particleDistance = 0.5;
 
         for (Player online : Bukkit.getOnlinePlayers()) {
-            ItemStack hand = online.getItemInHand();
+            ItemStack hand = online.getInventory().getItemInMainHand();
 
             if (hand.hasItemMeta() && hand.getItemMeta().displayName().equals(Component.text("Laser Pointer").color(NamedTextColor.WHITE))) {
                 Location location = online.getLocation().add(0, 1, 0);

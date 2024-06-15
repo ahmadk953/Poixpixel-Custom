@@ -29,3 +29,8 @@ Simply just drag the plugin file over to the plugin folder of your server
 ## Documentation
 
 Check out the [project wiki](https://github.com/ahmadk953/Poixpixel-Custom/wiki) for documentation.
+
+## Current Bugs
+
+ - Laser Pointer does not work
+ - Explosion Power Config Value does Not Work

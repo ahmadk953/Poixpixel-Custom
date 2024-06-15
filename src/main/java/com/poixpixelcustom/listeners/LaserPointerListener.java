@@ -2,7 +2,6 @@ package com.poixpixelcustom.listeners;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,7 +40,7 @@ public final class LaserPointerListener implements Listener {
             return;
         }
 
-        if (hand.hasItemMeta() && hand.getItemMeta().getDisplayName().equals(ChatColor.WHITE + "Laser Pointer")) {
+        if (hand.hasItemMeta() && hand.getItemMeta().displayName().equals(NamedTextColor.WHITE + "Laser Pointer")) {
             RayTraceResult result = player.rayTraceBlocks(distance);
 
             if (result != null && result.getHitBlock() != null && result.getHitBlock().isSolid())

@@ -14,6 +14,20 @@ import java.util.Arrays;
 
 public final class CustomRecipes {
 
+    private CustomRecipes() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    /**
+     * Registers custom recipes for the game.
+     *
+     * This function creates and adds custom recipes to the game's recipe manager.
+     * It creates a recipe for "Super Paper" using the ShapelessRecipe class,
+     * and a recipe for "Super Sword" using the FurnaceRecipe class.
+     * It also creates a recipe for "Laser Pointer" using the ShapedRecipe class.
+     * The recipes are added to the Bukkit recipe manager using the addRecipe method.
+     *
+     */
     public static void register() {
         ItemStack superPaper = new ItemStack(org.bukkit.Material.PAPER);
         ItemMeta superPaperMeta = superPaper.getItemMeta();

@@ -10,6 +10,10 @@ public class ExceptionHandeler {
     private static final Logger log = Logger.getLogger("Minecraft");
     private static final Plugin plugin = PoixpixelCustom.getInstance();
 
+    private ExceptionHandeler() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Handles an exception, logging an error message and potentially disabling a plugin.
      *

@@ -57,6 +57,7 @@ public class Board implements Runnable {
         Scoreboard scoreboard = player.getScoreboard();
         Team team = scoreboard.getTeam("walk_distance");
 
+        assert team != null;
         team.suffix(Component.text((player.getStatistic(Statistic.WALK_ONE_CM) + player.getStatistic(Statistic.SPRINT_ONE_CM)) + "cm").color(NamedTextColor.YELLOW));
     }
 
