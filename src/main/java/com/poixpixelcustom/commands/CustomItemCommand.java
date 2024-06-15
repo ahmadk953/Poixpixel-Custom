@@ -1,11 +1,9 @@
 package com.poixpixelcustom.commands;
 
 import com.poixpixelcustom.constants.Keys;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,13 +14,23 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
 public class CustomItemCommand implements CommandExecutor {
 
+    /**
+     * Executes the command for the player. If the sender is not a player, sends a message and returns true.
+     * Otherwise, creates a custom bucket item with a display name and lore, adds enchantments and metadata,
+     * and adds the item to the player's inventory.
+     *
+     * @param  sender      the command sender
+     * @param  command     the command that was executed
+     * @param  s           the command name
+     * @param  strings     the command arguments
+     * @return             true if the command was executed successfully
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         if (!(sender instanceof Player)) {

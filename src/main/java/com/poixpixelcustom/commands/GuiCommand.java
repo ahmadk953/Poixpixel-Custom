@@ -1,10 +1,8 @@
 package com.poixpixelcustom.commands;
 
 import com.poixpixelcustom.PoixpixelCustom;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -16,11 +14,23 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-
 import org.jetbrains.annotations.NotNull;
 
 public class GuiCommand implements CommandExecutor {
 
+    /**
+     * Executes the GUI command for the player. Opens an inventory with a utility menu and sets metadata to
+     * track the opened menu. The inventory contains three items: a diamond button, a lava bucket button,
+     * and a sunflower button. The diamond button displays the text "Get Diamond" in aqua color. The lava
+     * bucket button displays the text "Clear Inventory" in red color. The sunflower button displays the
+     * text "Clear Weather" in yellow color.
+     *
+     * @param  sender  the command sender
+     * @param  command the command that was executed
+     * @param  s       the command name
+     * @param  strings the command arguments
+     * @return         true if the command was executed successfully
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         if (!(sender instanceof Player)) {

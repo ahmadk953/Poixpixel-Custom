@@ -1,7 +1,6 @@
 package com.poixpixelcustom.listeners;
 
 import com.poixpixelcustom.PoixpixelCustom;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,6 +11,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class GuiListener implements Listener {
 
+    /**
+     * Handles the click event in a GUI inventory.
+     *
+     * @param  event  the InventoryClickEvent that triggered the click
+     */
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
@@ -36,6 +40,12 @@ public class GuiListener implements Listener {
         }
     }
 
+    /**
+     * Handles the event when a player closes a GUI inventory. Removes the "OpenedMenu" metadata from the player
+     * if it exists.
+     *
+     * @param event the InventoryCloseEvent that triggered the event
+     */
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
         Player player = (Player) event.getPlayer();

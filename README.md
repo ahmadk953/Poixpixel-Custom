@@ -9,9 +9,14 @@ A custom plugin that I created for my Minecraft server, Poixpixel.
 
 ## Installation
 
-### Dependencies
+### Dependencies (Must-Haves)
 
 - Vault
+
+### Soft Dependencies (Optional, but Recommended)
+
+- Luckperms
+- ProtocoLib
 
 ### Where to download
 

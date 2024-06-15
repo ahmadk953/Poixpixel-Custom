@@ -14,6 +14,14 @@ import org.bukkit.util.RayTraceResult;
 
 public final class LaserPointerListener implements Listener {
 
+    /**
+     * Handles the event when a player interacts with an item in their hand. If the player right clicks in the air,
+     * checks if they have the permission to use the laser and if the item in their hand is a laser pointer. If so,
+     * traces a line in the air and creates an explosion at the location of the hit block if it is a solid block. If the
+     * hit block is too far or not a solid block, sends a message to the player.
+     *
+     * @param  event  the PlayerInteractEvent representing the interaction event
+     */
     @EventHandler
     public void onClick(final PlayerInteractEvent event) {
         if (event.getHand() != EquipmentSlot.HAND || event.getAction() != Action.RIGHT_CLICK_AIR)

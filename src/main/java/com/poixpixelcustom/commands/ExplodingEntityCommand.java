@@ -2,17 +2,17 @@ package com.poixpixelcustom.commands;
 
 import com.poixpixelcustom.constants.Keys;
 import com.poixpixelcustom.utils.ConfigHandler;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Ageable;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +23,15 @@ import java.util.stream.Collectors;
 
 public class ExplodingEntityCommand implements CommandExecutor, TabExecutor {
 
+    /**
+     * Executes the exploding entity command.
+     *
+     * @param sender the command sender
+     * @param command the command being executed
+     * @param label the command label
+     * @param args the command arguments
+     * @return true if the command was executed successfully, false otherwise
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) {
@@ -74,6 +83,15 @@ public class ExplodingEntityCommand implements CommandExecutor, TabExecutor {
         return true;
     }
 
+    /**
+     * Generates a list of tab completion suggestions for the ExplodingEntityCommand.
+     *
+     * @param  sender  the command sender
+     * @param  command the command being executed
+     * @param  label   the command label
+     * @param  args    the command arguments
+     * @return          a list of tab completion suggestions or an empty list if none
+     */
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 1)

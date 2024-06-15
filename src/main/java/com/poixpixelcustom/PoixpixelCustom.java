@@ -10,14 +10,7 @@ import com.poixpixelcustom.tasks.ButterflyTask;
 import com.poixpixelcustom.tasks.LaserPointerTask;
 import com.poixpixelcustom.utils.ConfigHandler;
 import com.poixpixelcustom.utils.CustomRecipes;
-
 import org.bstats.bukkit.Metrics;
-
-import net.milkbowl.vault.chat.Chat;
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.permission.Permission;
-
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -102,6 +95,12 @@ public class PoixpixelCustom extends JavaPlugin {
         CustomRecipes.register();
     }
 
+    /**
+     * Cancels the running tasks if they are not already cancelled.
+     *
+     * This method checks if each task is not null and not already cancelled,
+     * and if so, cancels the task.
+     */
     private void disablePlugin() {
         /*
          * Cancel Tasks if they are Running

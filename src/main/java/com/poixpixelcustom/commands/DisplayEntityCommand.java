@@ -3,18 +3,19 @@ package com.poixpixelcustom.commands;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.*;
+import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display.Billboard;
+import org.bukkit.entity.ItemDisplay;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Transformation;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +26,15 @@ import java.util.logging.Logger;
 public class DisplayEntityCommand implements CommandExecutor, TabExecutor {
     private static final Logger log = Logger.getLogger("Minecraft");
 
+    /**
+     * Executes the display entity command based on the provided arguments.
+     *
+     * @param  sender     the command sender
+     * @param  command    the command being executed
+     * @param  label      the label of the command
+     * @param  args       the arguments passed to the command
+     * @return            true if the command was executed successfully, false otherwise
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) {
@@ -100,6 +110,16 @@ public class DisplayEntityCommand implements CommandExecutor, TabExecutor {
         return true;
     }
 
+    /**
+     * Overrides the onTabComplete method of the TabExecutor interface to provide tab completion suggestions
+     * for the DisplayEntityCommand.
+     *
+     * @param  sender     the command sender
+     * @param  command    the command being executed
+     * @param  label      the label of the command
+     * @param  args       the arguments passed to the command
+     * @return            a list of suggestions for the next argument, or an empty list if no suggestions are available
+     */
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 

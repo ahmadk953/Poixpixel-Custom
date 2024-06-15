@@ -2,7 +2,6 @@ package com.poixpixelcustom.tasks;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,6 +14,9 @@ public final class LaserPointerTask implements Runnable {
     private LaserPointerTask() {
     }
 
+    /**
+     * The run method that executes the laser pointer task for online players.
+     */
     @Override
     public void run() {
         int length = 5;
@@ -39,6 +41,11 @@ public final class LaserPointerTask implements Runnable {
         }
     }
 
+    /**
+     * Returns the singleton instance of the LaserPointerTask class.
+     *
+     * @return the singleton instance of the LaserPointerTask class
+     */
     public static LaserPointerTask getInstance() {
         return instance;
     }

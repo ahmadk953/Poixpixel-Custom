@@ -2,10 +2,8 @@ package com.poixpixelcustom.listeners;
 
 import com.poixpixelcustom.constants.Keys;
 import com.poixpixelcustom.utils.ConfigHandler;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,6 +17,14 @@ public class EntityListener implements Listener {
     // FIXME: Figure out why this does not work
     private final float explosionPower = ConfigHandler.getInstance().getExplosionPower();
 
+    /**
+     * Handles the event when a player right-clicks on an entity with the main hand item.
+     * If the entity is of the exploding type, has the custom entity tag, and the main hand item has the custom bucket tag,
+     * and the player has the permission to use the exploding entity, it creates an explosion at the entity's location.
+     * Otherwise, it sends a message to the player.
+     *
+     * @param event the PlayerInteractEntityEvent representing the right-click event
+     */
     @EventHandler
     public void onEntityRightClick(PlayerInteractEntityEvent event) {
 

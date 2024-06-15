@@ -21,6 +21,10 @@ public class ButterflyTask implements Runnable {
     private ButterflyTask() {
     }
 
+    /**
+     * Executes the task that generates butterfly wing effects for online players.
+     *
+     */
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers())
@@ -28,6 +32,11 @@ public class ButterflyTask implements Runnable {
                 generateButterflyWingEffect(player);
     }
 
+    /**
+     * Generates butterfly wing effects around the specified player location by spawning particles in a circular pattern.
+     *
+     * @param  player  the player for whom the butterfly wing effects are generated
+     */
     private void generateButterflyWingEffect(Player player) {
         Location location = player.getLocation();
 
@@ -57,6 +66,12 @@ public class ButterflyTask implements Runnable {
         }
     }
 
+    /**
+     * Rotates the given vector around the X-axis by the specified angle.
+     *
+     * @param  vector  the vector to rotate
+     * @param  angle   the angle of rotation in degrees
+     */
     private void rotateAroundAxisX(Vector vector, double angle) {
         angle = Math.toRadians(angle);
 
@@ -68,6 +83,12 @@ public class ButterflyTask implements Runnable {
         vector.setY(y).setZ(z);
     }
 
+    /**
+     * Rotates the given vector around the Y-axis by the specified angle.
+     *
+     * @param  vector  the vector to rotate
+     * @param  angle   the angle of rotation in degrees
+     */
     private void rotateAroundAxisY(Vector vector, double angle) {
         angle = -angle;
         angle = Math.toRadians(angle);
@@ -80,18 +101,39 @@ public class ButterflyTask implements Runnable {
         vector.setX(x).setZ(z);
     }
 
+    /**
+     * Adds a player with the specified UUID to the list of players viewing wings.
+     *
+     * @param  uuid  the UUID of the player to add
+     */
     public void addPlayer(UUID uuid) {
         viewingWings.add(uuid);
     }
 
+    /**
+     * Removes a player with the specified UUID from the list of players viewing wings.
+     *
+     * @param  uuid  the UUID of the player to remove
+     */
     public void removePlayer(UUID uuid) {
         viewingWings.remove(uuid);
     }
 
+    /**
+     * Checks if the given UUID is present in the set of UUIDs of players viewing wings.
+     *
+     * @param        uuid  the UUID of the player to check
+     * @return       true if the UUID is present in the set, false otherwise
+     */
     public boolean hasPlayer(UUID uuid) {
         return viewingWings.contains(uuid);
     }
 
+    /**
+     * Returns the singleton instance of the ButterflyTask class.
+     *
+     * @return  the singleton instance of the ButterflyTask class
+     */
     public static ButterflyTask getInstance() {
         return instance;
     }
