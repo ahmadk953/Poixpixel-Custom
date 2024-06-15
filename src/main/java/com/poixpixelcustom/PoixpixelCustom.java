@@ -26,10 +26,6 @@ import java.util.logging.Logger;
 import static com.poixpixelcustom.utils.ExceptionHandeler.handleException;
 
 public class PoixpixelCustom extends JavaPlugin {
-    private Economy econ = null;
-    private static Permission perms = null;
-    private static Chat chat = null;
-
     private static final Logger log = Logger.getLogger("Minecraft");
 
     private BukkitTask butterflyTask;
@@ -68,17 +64,6 @@ public class PoixpixelCustom extends JavaPlugin {
      */
     private void setup() {
         Metrics metrics = new Metrics(this, 20841);
-
-        /*
-         * Setup Vault
-         */
-        /*
-        if (!setupEconomy()) {
-            throw new RuntimeException("Disabled due to no Vault dependency found!");
-        }
-        setupPermissions();
-        setupChat();
-         */
 
         /*
          * Register Listeners
@@ -131,46 +116,6 @@ public class PoixpixelCustom extends JavaPlugin {
             laserPointerTask.cancel();
         }
     }
-
-    /**
-     * Set up the economy for the plugin.
-     *
-     * @return true if the economy setup was successful, false otherwise
-     */
-    private boolean setupEconomy() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
-        econ = rsp.getProvider();
-        return econ != null;
-    }
-
-    /**
-     * Set up the chat functionality.
-     *
-     * @return true if chat provider is successfully set up, false otherwise
-     */
-    private boolean setupChat() {
-        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
-        chat = rsp.getProvider();
-        return chat != null;
-    }
-
-    /**
-     * A private method to set up permissions.
-     *
-     * @return true if permissions are set up, false otherwise
-     */
-    private boolean setupPermissions() {
-        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        perms = rsp.getProvider();
-        return perms != null;
-    }
-
 
     /**
      * Retrieves an instance of PoixpixelCustom.

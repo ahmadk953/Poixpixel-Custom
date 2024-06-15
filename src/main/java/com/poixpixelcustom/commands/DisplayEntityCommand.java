@@ -20,8 +20,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class DisplayEntityCommand implements CommandExecutor, TabExecutor {
+    private static final Logger log = Logger.getLogger("Minecraft");
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -91,9 +93,8 @@ public class DisplayEntityCommand implements CommandExecutor, TabExecutor {
             }
 
         } catch (Throwable t) {
-            sender.sendMessage("Error: " + t.getMessage());
-
-            t.printStackTrace();
+           log.severe("[PoixpixelCustom] Error while spawning display entity: " + t);
+           sender.sendMessage("Error while spawning display entity: " + t.getMessage());
         }
 
         return true;
