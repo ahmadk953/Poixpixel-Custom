@@ -5,7 +5,7 @@
 
 ## About
 
-A custom plugin that I created for my Minecraft server, Poixpixel.
+A custom plugin that I created for my Minecraft server.
 
 ## Installation
 
