@@ -2,6 +2,7 @@
 
 [![CodeQL](https://github.com/ahmadk953/Poixpixel-Custom/actions/workflows/codeql.yml/badge.svg?branch=master)](https://github.com/ahmadk953/Poixpixel-Custom/actions/workflows/codeql.yml)
 [![Maven Compile](https://github.com/ahmadk953/Poixpixel-Custom/actions/workflows/maven.yml/badge.svg)](https://github.com/ahmadk953/Poixpixel-Custom/actions/workflows/maven.yml)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fahmadk953%2FPoixpixel-Custom.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fahmadk953%2FPoixpixel-Custom?ref=badge_shield)
 
 ## About
 
@@ -34,3 +35,7 @@ Check out the [project wiki](https://github.com/ahmadk953/Poixpixel-Custom/wiki)
 
  - Laser Pointer does not work
  - Explosion Power Config Value does Not Work
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fahmadk953%2FPoixpixel-Custom.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fahmadk953%2FPoixpixel-Custom?ref=badge_large)
