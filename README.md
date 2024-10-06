@@ -21,7 +21,7 @@ A custom plugin that I created for my Minecraft server.
 
 ### Where to download
 
-Head over to the [GitHub releases page](https://github.com/ahmadk953/Poixpixel-Custom/releases) and download the latest version
+Head over to the [GitHub releases page](https://github.com/ahmadk953/Poixpixel-Custom/releases) and download the latest version. Pre-made devlopment builds are not yet available. To compile and run development builds yourself, please see [the wiki](https://github.com/ahmadk953/Poixpixel-Custom/wiki).
 
 ### How to add to your server
 
