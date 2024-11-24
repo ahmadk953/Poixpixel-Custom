@@ -28,7 +28,7 @@ public final class LaserPointerListener implements Listener {
 
 
         Player player = event.getPlayer();
-        ItemStack hand = player.getItemInHand();
+        ItemStack hand = player.getInventory().getItemInMainHand();
         int distance = 100;
 
         if (!player.hasPermission("poixpixelcustom.laser.use")) {

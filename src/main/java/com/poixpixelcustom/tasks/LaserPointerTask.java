@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import java.util.Objects;
+
 public final class LaserPointerTask implements Runnable {
 
     private static final LaserPointerTask instance = new LaserPointerTask();
@@ -25,7 +27,7 @@ public final class LaserPointerTask implements Runnable {
         for (Player online : Bukkit.getOnlinePlayers()) {
             ItemStack hand = online.getInventory().getItemInMainHand();
 
-            if (hand.hasItemMeta() && hand.getItemMeta().displayName().equals(Component.text("Laser Pointer").color(NamedTextColor.WHITE))) {
+            if (hand.hasItemMeta() && Objects.equals(hand.getItemMeta().displayName(), Component.text("Laser Pointer").color(NamedTextColor.WHITE))) {
                 Location location = online.getLocation().add(0, 1, 0);
 
                 for (double waypoint = 1; waypoint < length; waypoint += particleDistance) {

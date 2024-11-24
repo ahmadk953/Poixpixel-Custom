@@ -1,10 +1,7 @@
 package com.poixpixelcustom;
 
 import com.poixpixelcustom.commands.*;
-import com.poixpixelcustom.listeners.ChatListener;
-import com.poixpixelcustom.listeners.EntityListener;
-import com.poixpixelcustom.listeners.GuiListener;
-import com.poixpixelcustom.listeners.LaserPointerListener;
+import com.poixpixelcustom.listeners.*;
 import com.poixpixelcustom.tasks.Board;
 import com.poixpixelcustom.tasks.ButterflyTask;
 import com.poixpixelcustom.tasks.LaserPointerTask;
@@ -65,6 +62,7 @@ public class PoixpixelCustom extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
         getServer().getPluginManager().registerEvents(new LaserPointerListener(), this);
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
+        getServer().getPluginManager().registerEvents(new VillagerListener(), this);
 
         /*
          * Register Commands
@@ -90,14 +88,14 @@ public class PoixpixelCustom extends JavaPlugin {
         laserPointerTask = getServer().getScheduler().runTaskTimer(this, LaserPointerTask.getInstance(), 0, 1);
 
         /*
-        * Register Custom Recipes
+         * Register Custom Recipes
          */
         CustomRecipes.register();
     }
 
     /**
      * Cancels the running tasks if they are not already cancelled.
-     *
+     * <p>
      * This method checks if each task is not null and not already cancelled,
      * and if so, cancels the task.
      */

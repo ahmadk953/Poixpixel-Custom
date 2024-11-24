@@ -41,7 +41,7 @@ public class Board implements Runnable {
         objective.getScore(ChatColor.WHITE + "This is a test scoreboard").setScore(4);
         objective.getScore(ChatColor.DARK_RED + " ").setScore(3);
         objective.getScore(ChatColor.AQUA + " ").setScore(1);
-        objective.getScore(ChatColor.GREEN + "Plugin by ahmadk953 for Poixpixel").setScore(0);
+        objective.getScore(ChatColor.GREEN + "Plugin by ahmadk953").setScore(0);
 
         Team team = scoreboard.registerNewTeam("walk_distance");
         String teamKey = ChatColor.GOLD.toString();
