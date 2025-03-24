@@ -6,7 +6,7 @@
 
 ## About
 
-A custom Minecraft plugin.
+A utilities Minecraft plugin.
 
 ## Installation
 
