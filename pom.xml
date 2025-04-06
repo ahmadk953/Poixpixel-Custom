@@ -18,7 +18,7 @@
 
     <name>com.poixpixelcustom.PoixpixelCustom</name>
 
-    <description>A custom plugin made for Poixpixel</description>
+    <description>A custom utilities Minecraft plugin</description>
     <properties>
         <java.version>23</java.version>
         <maven.version>3.9.6</maven.version>
@@ -121,7 +121,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.3-R0.1-SNAPSHOT</version>
+            <version>1.21.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
