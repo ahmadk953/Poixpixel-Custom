@@ -6,7 +6,7 @@
 
 ## About
 
-A custom plugin that I created for my Minecraft server.
+A utilities Minecraft plugin.
 
 ## Installation
 
