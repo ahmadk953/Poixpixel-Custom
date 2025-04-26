@@ -4,6 +4,9 @@
 [![Maven Compile](https://github.com/ahmadk953/Poixpixel-Custom/actions/workflows/maven.yml/badge.svg)](https://github.com/ahmadk953/Poixpixel-Custom/actions/workflows/maven.yml)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fahmadk953%2FPoixpixel-Custom.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fahmadk953%2FPoixpixel-Custom?ref=badge_shield)
 
+> [!WARNING]
+> Devlopment on this project has been paused.
+
 ## About
 
 A utilities Minecraft plugin.
