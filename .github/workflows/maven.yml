@@ -12,7 +12,7 @@ jobs:
         java: [ "23" ]
     name: Java (Temurin) ${{ matrix.java }} Build and Analyze
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up Eclipse Temurin
         uses: actions/setup-java@v5
         with:
