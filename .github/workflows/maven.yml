@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ "23" ]
+        java: [ "24" ]
     name: Java (Temurin) ${{ matrix.java }} Build and Analyze
     steps:
       - uses: actions/checkout@v6
@@ -19,7 +19,7 @@ jobs:
           distribution: "temurin"
           java-version: ${{ matrix.java }}
           java-package: jdk
-      - name: Cache SonarCloud packages
+      - name: Cache SonarQube packages
         uses: actions/cache@v5
         with:
           path: ~/.sonar/cache
@@ -33,7 +33,6 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build and analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ahmadk953_Poixpixel-Custom
       - name: Generate JavaDoc
