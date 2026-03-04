@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: ["23"]
+        java: ["24"]
         language: ["java"]
 
     steps:
