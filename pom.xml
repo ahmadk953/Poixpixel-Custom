@@ -20,7 +20,7 @@
 
     <description>A custom utilities Minecraft plugin</description>
     <properties>
-        <java.version>24</java.version>
+        <java.version>26</java.version>
         <maven.version>3.9.12</maven.version>
         <main.class>com.poixpixelcustom</main.class>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -120,14 +120,8 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.10-R0.1-SNAPSHOT</version>
+            <version>[26.1.2.build,)</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.papermc</groupId>
-            <artifactId>paperlib</artifactId>
-            <version>1.0.8</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>

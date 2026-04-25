@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class ButterflyCommand implements CommandExecutor {
 
@@ -23,14 +24,13 @@ public class ButterflyCommand implements CommandExecutor {
      * @return         true if the command was executed successfully, false otherwise
      */
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (!(sender instanceof Player)) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NonNull [] strings) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only players can use this command!");
 
             return true;
         }
 
-        Player player = (Player) sender;
         ButterflyTask instance = ButterflyTask.getInstance();
 
         if (instance.hasPlayer(player.getUniqueId())) {
